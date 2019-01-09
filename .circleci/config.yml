@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: oracle/graalvm-ce:latest
+      - image: oracle/graalvm-ce:1.0.0-rc10
 
     working_directory: ~/repo
     
