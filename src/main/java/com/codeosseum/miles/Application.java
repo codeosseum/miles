@@ -2,10 +2,10 @@ package com.codeosseum.miles;
 
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.mapping.MappingModule;
-import com.codeosseum.miles.messaging.http.HttpBootstrapper;
-import com.codeosseum.miles.messaging.http.configuration.HttpModule;
-import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
-import com.codeosseum.miles.messaging.websocket.configuration.WebSocketModule;
+import com.codeosseum.miles.communication.http.HttpBootstrapper;
+import com.codeosseum.miles.communication.http.configuration.HttpModule;
+import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
+import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
