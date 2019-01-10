@@ -2,7 +2,6 @@ package com.codeosseum.miles.messaging.websocket.transmission;
 
 import java.io.IOException;
 
-import com.codeosseum.miles.messaging.action.Action;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.eclipse.jetty.websocket.api.Session;
@@ -16,7 +15,7 @@ public class MessageTransmitterImpl implements MessageTransmitter {
     }
 
     @Override
-    public void writeMessage(final Session session, final Action action, final Object payload) throws IOException {
+    public void writeMessage(final Session session, final String action, final Object payload) throws IOException {
         final OutboundMessage message = new OutboundMessage(action, payload);
 
         session.getRemote().sendStringByFuture(gson.toJson(message));
@@ -24,7 +23,7 @@ public class MessageTransmitterImpl implements MessageTransmitter {
 
     @Override
     public void writeException(final Session session, final Exception exception) throws IOException {
-        final OutboundMessage message = new OutboundMessage(Action.ERROR, exception);
+        final OutboundMessage message = new OutboundMessage("error", exception);
 
         session.getRemote().sendString(gson.toJson(message));
     }
@@ -34,8 +33,8 @@ public class MessageTransmitterImpl implements MessageTransmitter {
 
         private final Object payload;
 
-        public OutboundMessage(Action action, Object payload) {
-            this.action = action.name();
+        public OutboundMessage(final String action, final Object payload) {
+            this.action = action;
             this.payload = payload;
         }
     }

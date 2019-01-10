@@ -1,5 +1,6 @@
 package com.codeosseum.miles.messaging.websocket.configuration;
 
+import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.messaging.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitterImpl;
@@ -22,5 +23,7 @@ public class WebSocketModule extends AbstractModule {
         bind(MessageTransmitter.class).to(MessageTransmitterImpl.class).in(Singleton.class);
 
         bind(WebSocketDispatcher.class).in(Singleton.class);
+
+        bind(WebSocketBootstrapper.class).in(Singleton.class);
     }
 }
