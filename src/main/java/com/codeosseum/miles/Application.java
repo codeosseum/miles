@@ -1,11 +1,13 @@
 package com.codeosseum.miles;
 
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
+import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.mapping.MappingModule;
 import com.codeosseum.miles.communication.http.HttpBootstrapper;
 import com.codeosseum.miles.communication.http.configuration.HttpModule;
 import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
+import com.codeosseum.miles.registration.configuration.RegistrationModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -17,6 +19,8 @@ import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 import static java.util.Arrays.asList;
+import static spark.Spark.awaitInitialization;
+import static spark.Spark.get;
 import static spark.Spark.port;
 
 public final class Application {
@@ -33,7 +37,8 @@ public final class Application {
                 new MappingModule(),
                 new WebSocketModule(),
                 new EventBusModule(),
-                new HttpModule());
+                new HttpModule(),
+                new RegistrationModule());
     }
 
     @Singleton
@@ -44,10 +49,13 @@ public final class Application {
 
         private final HttpBootstrapper httpBootstrapper;
 
+        private final EventDispatcher eventDispatcher;
+
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final EventDispatcher eventDispatcher) {
             this.webSocketBootstrapper = webSocketBootstrapper;
             this.httpBootstrapper = httpBootstrapper;
+            this.eventDispatcher = eventDispatcher;
         }
 
         private void bootstrap() {
@@ -56,6 +64,12 @@ public final class Application {
             webSocketBootstrapper.bootstrap();
 
             httpBootstrapper.bootstrap();
+
+            get("/", (request, response) -> "Hello, World!");
+
+            awaitInitialization();
+
+            eventDispatcher.dispatchEvent(new StartupSignal());
         }
     }
 }
