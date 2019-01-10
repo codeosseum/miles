@@ -9,6 +9,7 @@ import com.codeosseum.miles.messaging.websocket.handler.OnCloseHandler;
 import com.codeosseum.miles.messaging.websocket.handler.OnConnectHandler;
 import com.codeosseum.miles.messaging.websocket.handler.OnMessageHandler;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.inject.Inject;
@@ -34,18 +35,21 @@ public class WebSocketDispatcher {
 
     private final Set<OnCloseHandler> onCloseHandlers;
 
-    private final Map<String, OnMessageHandler> messageHandlerMap;
+    private final Map<String, TypedMessageHandler<?>> messageHandlerMap;
+
+    private final Gson gson;
 
     private final JsonParser jsonParser;
 
     private final MessageTransmitter messageTransmitter;
 
     @Inject
-    public WebSocketDispatcher(final JsonParser jsonParser, final MessageTransmitter messageTransmitter) {
+    public WebSocketDispatcher(final Gson gson, final JsonParser jsonParser, final MessageTransmitter messageTransmitter) {
         this.onConnectHandlers = new HashSet<>();
         this.onCloseHandlers = new HashSet<>();
         this.messageHandlerMap = new HashMap<>();
 
+        this.gson = gson;
         this.jsonParser = jsonParser;
 
         this.messageTransmitter = messageTransmitter;
@@ -59,8 +63,8 @@ public class WebSocketDispatcher {
         this.onCloseHandlers.add(requireNonNull(handler));
     }
 
-    public void attachOnMessageHandler(final String action, final OnMessageHandler handler) {
-        this.messageHandlerMap.put(requireNonNull(action), requireNonNull(handler));
+    public <T> void attachOnMessageHandler(final String action, final Class<T> payloadType, final OnMessageHandler<T> handler) {
+        this.messageHandlerMap.put(requireNonNull(action), new TypedMessageHandler<>(requireNonNull(payloadType), requireNonNull(handler)));
     }
 
     @OnWebSocketConnect
@@ -87,13 +91,30 @@ public class WebSocketDispatcher {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void dispatchMessage(final Session session, final RawMessage message)
             throws IOException, MalformedMessageException, UnsupportedActionException {
-        if (!messageHandlerMap.containsKey(message.action)) {
-            throw new UnsupportedActionException(message.action);
+        final TypedMessageHandler typedHandler = getHandlerForAction(message.action);
+
+        final Object payload = jsonPayloadToObject(message.payload, typedHandler.payloadType);
+
+        typedHandler.handler.handle(session, typedHandler.payloadType.cast(payload));
+    }
+
+    private TypedMessageHandler<?> getHandlerForAction(final String action) throws UnsupportedActionException {
+        if (!messageHandlerMap.containsKey(action)) {
+            throw new UnsupportedActionException(action);
         }
 
-        messageHandlerMap.get(message.action).handle(session, message.payload);
+        return messageHandlerMap.get(action);
+    }
+
+    private <T> T jsonPayloadToObject(final String payload, final Class<T> outputType) throws MalformedMessageException {
+        try {
+            return gson.fromJson(payload, outputType);
+        } catch (Exception e) {
+            throw new MalformedMessageException(e);
+        }
     }
 
     private void sendException(final Session session, final Exception exception) {
@@ -125,6 +146,17 @@ public class WebSocketDispatcher {
         private RawMessage(final String action, final String payload) {
             this.action = action;
             this.payload = payload;
+        }
+    }
+
+    private static final class TypedMessageHandler<T> {
+        private final Class<T> payloadType;
+
+        private final OnMessageHandler<T> handler;
+
+        public TypedMessageHandler(final Class<T> payloadType, final OnMessageHandler<T> handler) {
+            this.payloadType = payloadType;
+            this.handler = handler;
         }
     }
 }

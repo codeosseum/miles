@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.codeosseum.miles.messaging.MalformedMessageException;
 import org.eclipse.jetty.websocket.api.Session;
 
-public interface OnMessageHandler {
-    void handle(Session session, String payload) throws MalformedMessageException, IOException;
+@FunctionalInterface
+public interface OnMessageHandler<T> {
+    void handle(Session session, T payload) throws IOException;
 }
