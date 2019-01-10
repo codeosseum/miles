@@ -1,5 +1,6 @@
 package com.codeosseum.miles;
 
+import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.mapping.MappingModule;
 import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.messaging.websocket.configuration.WebSocketModule;
@@ -28,7 +29,8 @@ public final class Application {
     private static List<Module> modules() {
         return asList(
                 new MappingModule(),
-                new WebSocketModule());
+                new WebSocketModule(),
+                new EventBusModule());
     }
 
     @Singleton
