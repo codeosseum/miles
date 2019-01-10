@@ -22,8 +22,6 @@ public enum PostConstructListener implements TypeListener {
     public <I> void hear(final TypeLiteral<I> typeLiteral, final TypeEncounter<I> typeEncounter) {
         final List<Method> callableMethods = findCallableMethods(typeLiteral.getRawType());
 
-        System.out.println(callableMethods.size());
-
         typeEncounter.register((InjectionListener<I>) injectee -> {
             if (postConstructed.contains(injectee)) {
                 return;
