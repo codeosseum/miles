@@ -4,6 +4,7 @@ import com.codeosseum.miles.messaging.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitterImpl;
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class WebSocketModule extends AbstractModule {
-    private static final List<Class<?>> REQUIRES = asList(Gson.class);
+    private static final List<Class<?>> REQUIRES = asList(Gson.class, JsonParser.class);
 
     @Override
     protected void configure() {
