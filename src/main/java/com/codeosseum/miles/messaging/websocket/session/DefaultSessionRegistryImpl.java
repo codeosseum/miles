@@ -9,14 +9,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.eclipse.jetty.websocket.api.Session;
 
-public class SessionRegistryImpl implements SessionRegistry {
+public class DefaultSessionRegistryImpl implements SessionRegistry {
     private final Set<Session> activeSessions;
 
     private final Map<Long, Session> idToSessionMap;
 
     private final Map<Session, Long> sessionToIdMap;
 
-    public SessionRegistryImpl() {
+    public DefaultSessionRegistryImpl() {
         this.activeSessions = new CopyOnWriteArraySet<>();
         this.idToSessionMap = new ConcurrentHashMap<>();
         this.sessionToIdMap = new ConcurrentHashMap<>();

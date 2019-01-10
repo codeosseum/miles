@@ -4,6 +4,8 @@ import com.codeosseum.miles.messaging.push.PushMessageService;
 import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.messaging.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.messaging.websocket.push.WebSocketPushMessageServiceImpl;
+import com.codeosseum.miles.messaging.websocket.session.DefaultSessionRegistryImpl;
+import com.codeosseum.miles.messaging.websocket.session.SessionRegistry;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitterImpl;
 import com.google.gson.Gson;
@@ -25,6 +27,8 @@ public class WebSocketModule extends AbstractModule {
         bind(MessageTransmitter.class).to(MessageTransmitterImpl.class).in(Singleton.class);
 
         bind(WebSocketDispatcher.class).in(Singleton.class);
+
+        bind(SessionRegistry.class).to(DefaultSessionRegistryImpl.class).in(Singleton.class);
 
         bind(PushMessageService.class).to(WebSocketPushMessageServiceImpl.class).in(Singleton.class);
 
