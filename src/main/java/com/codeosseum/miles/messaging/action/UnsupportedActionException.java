@@ -1,15 +1,15 @@
 package com.codeosseum.miles.messaging.action;
 
 public class UnsupportedActionException extends Exception {
-    private final Action action;
+    private final String action;
 
-    public UnsupportedActionException(Action action) {
+    public UnsupportedActionException(String action) {
         super("Unsupported action: " + action);
 
         this.action = action;
     }
 
-    public Action getAction() {
+    public String getAction() {
         return action;
     }
 }

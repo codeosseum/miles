@@ -1,13 +1,9 @@
 package com.codeosseum.miles.messaging.websocket.dispatcher;
 
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.codeosseum.miles.messaging.MalformedMessageException;
-import com.codeosseum.miles.messaging.action.Action;
 import com.codeosseum.miles.messaging.action.UnsupportedActionException;
 import com.codeosseum.miles.messaging.websocket.handler.OnCloseHandler;
 import com.codeosseum.miles.messaging.websocket.handler.OnConnectHandler;
@@ -38,7 +34,7 @@ public class WebSocketDispatcher {
 
     private final Set<OnCloseHandler> onCloseHandlers;
 
-    private final Map<Action, OnMessageHandler> messageHandlerMap;
+    private final Map<String, OnMessageHandler> messageHandlerMap;
 
     private final JsonParser jsonParser;
 
@@ -48,7 +44,7 @@ public class WebSocketDispatcher {
     public WebSocketDispatcher(final JsonParser jsonParser, final MessageTransmitter messageTransmitter) {
         this.onConnectHandlers = new HashSet<>();
         this.onCloseHandlers = new HashSet<>();
-        this.messageHandlerMap = new EnumMap<>(Action.class);
+        this.messageHandlerMap = new HashMap<>();
 
         this.jsonParser = jsonParser;
 
@@ -63,7 +59,7 @@ public class WebSocketDispatcher {
         this.onCloseHandlers.add(requireNonNull(handler));
     }
 
-    public void attachOnMessageHandler(final Action action, final OnMessageHandler handler) {
+    public void attachOnMessageHandler(final String action, final OnMessageHandler handler) {
         this.messageHandlerMap.put(requireNonNull(action), requireNonNull(handler));
     }
 
@@ -115,18 +111,18 @@ public class WebSocketDispatcher {
             final String action = jsonObject.get(ACTION_FIELD).getAsString();
             final String payload = jsonObject.get(PAYLOAD_FIELD).toString();
 
-            return new RawMessage(Action.valueOf(action), payload);
+            return new RawMessage(action, payload);
         } catch (Exception e) {
             throw new MalformedMessageException(e);
         }
     }
 
     private static final class RawMessage {
-        private final Action action;
+        private final String action;
 
         private final String payload;
 
-        private RawMessage(Action action, String payload) {
+        private RawMessage(final String action, final String payload) {
             this.action = action;
             this.payload = payload;
         }
