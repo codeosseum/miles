@@ -6,11 +6,14 @@ import com.google.gson.JsonParser;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.mashape.unirest.http.ObjectMapper;
 
 public class MappingModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(JsonParser.class).in(Singleton.class);
+
+        bind(ObjectMapper.class).to(GsonObjectMapperImpl.class).in(Singleton.class);
     }
 
     @Provides

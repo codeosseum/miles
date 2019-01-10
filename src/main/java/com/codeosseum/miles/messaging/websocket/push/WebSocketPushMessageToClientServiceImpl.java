@@ -1,7 +1,7 @@
 package com.codeosseum.miles.messaging.websocket.push;
 
 import com.codeosseum.miles.messaging.Message;
-import com.codeosseum.miles.messaging.push.PushMessageService;
+import com.codeosseum.miles.messaging.push.PushMessageToClientService;
 import com.codeosseum.miles.messaging.websocket.session.SessionRegistry;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
 import com.google.inject.Inject;
@@ -12,15 +12,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Optional;
 
-public class WebSocketPushMessageServiceImpl implements PushMessageService {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketPushMessageServiceImpl.class);
+public class WebSocketPushMessageToClientServiceImpl implements PushMessageToClientService {
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketPushMessageToClientServiceImpl.class);
 
     private final SessionRegistry sessionRegistry;
 
     private final MessageTransmitter messageTransmitter;
 
     @Inject
-    public WebSocketPushMessageServiceImpl(final SessionRegistry sessionRegistry, final MessageTransmitter messageTransmitter) {
+    public WebSocketPushMessageToClientServiceImpl(final SessionRegistry sessionRegistry, final MessageTransmitter messageTransmitter) {
         this.sessionRegistry = sessionRegistry;
         this.messageTransmitter = messageTransmitter;
     }

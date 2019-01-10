@@ -2,6 +2,8 @@ package com.codeosseum.miles;
 
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.mapping.MappingModule;
+import com.codeosseum.miles.messaging.http.HttpBootstrapper;
+import com.codeosseum.miles.messaging.http.configuration.HttpModule;
 import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.messaging.websocket.configuration.WebSocketModule;
 import com.google.inject.Inject;
@@ -18,7 +20,7 @@ import static java.util.Arrays.asList;
 import static spark.Spark.port;
 
 public final class Application {
-    private static final int PORT = 8080;
+    private static final int PORT = 3000;
 
     public static void main(String[] args) {
         final Injector injector = createInjector(modules());
@@ -30,7 +32,8 @@ public final class Application {
         return asList(
                 new MappingModule(),
                 new WebSocketModule(),
-                new EventBusModule());
+                new EventBusModule(),
+                new HttpModule());
     }
 
     @Singleton
@@ -39,15 +42,20 @@ public final class Application {
 
         private final WebSocketBootstrapper webSocketBootstrapper;
 
+        private final HttpBootstrapper httpBootstrapper;
+
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper) {
             this.webSocketBootstrapper = webSocketBootstrapper;
+            this.httpBootstrapper = httpBootstrapper;
         }
 
         private void bootstrap() {
             port(PORT);
 
             webSocketBootstrapper.bootstrap();
+
+            httpBootstrapper.bootstrap();
         }
     }
 }

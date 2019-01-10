@@ -1,9 +1,9 @@
 package com.codeosseum.miles.messaging.websocket.configuration;
 
-import com.codeosseum.miles.messaging.push.PushMessageService;
+import com.codeosseum.miles.messaging.push.PushMessageToClientService;
 import com.codeosseum.miles.messaging.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.messaging.websocket.dispatcher.WebSocketDispatcher;
-import com.codeosseum.miles.messaging.websocket.push.WebSocketPushMessageServiceImpl;
+import com.codeosseum.miles.messaging.websocket.push.WebSocketPushMessageToClientServiceImpl;
 import com.codeosseum.miles.messaging.websocket.session.DefaultSessionRegistryImpl;
 import com.codeosseum.miles.messaging.websocket.session.SessionRegistry;
 import com.codeosseum.miles.messaging.websocket.transmission.MessageTransmitter;
@@ -30,7 +30,7 @@ public class WebSocketModule extends AbstractModule {
 
         bind(SessionRegistry.class).to(DefaultSessionRegistryImpl.class).in(Singleton.class);
 
-        bind(PushMessageService.class).to(WebSocketPushMessageServiceImpl.class).in(Singleton.class);
+        bind(PushMessageToClientService.class).to(WebSocketPushMessageToClientServiceImpl.class).in(Singleton.class);
 
         bind(WebSocketBootstrapper.class).in(Singleton.class);
     }
