@@ -24,6 +24,7 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 
 public final class Application {
+    // TODO: read from configuration
     private static final int PORT = 3000;
 
     public static void main(String[] args) {
