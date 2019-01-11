@@ -1,5 +1,6 @@
 package com.codeosseum.miles.registration.configuration;
 
+import com.codeosseum.miles.StartupSignal;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.registration.listener.StartupListener;
 import com.codeosseum.miles.util.inject.initialization.PostConstruct;
@@ -18,6 +19,6 @@ public class EventConsumerRegistrar {
 
     @PostConstruct
     public void postConstruct() {
-        eventDispatcher.registerConsumer(startupListener);
+        eventDispatcher.registerConsumer(StartupSignal.class, startupListener);
     }
 }
