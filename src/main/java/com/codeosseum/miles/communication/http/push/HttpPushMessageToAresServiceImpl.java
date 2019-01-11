@@ -10,7 +10,7 @@ import java.util.Objects;
 public class HttpPushMessageToAresServiceImpl implements PushMessageToAresService {
     private static final String EVENT_IDENTIFIER_HEADER = "X-Event-Identifier";
 
-    private static final String ARES_HOST = "http://127.0.0.1:8080";
+    private static final String ARES_HOST = "http://127.0.0.1:8000/api/event";
 
     @Override
     public <T> void sendMessage(final Message<T> message) {
