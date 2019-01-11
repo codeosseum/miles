@@ -5,13 +5,13 @@ import com.codeosseum.miles.registration.listener.StartupListener;
 import com.codeosseum.miles.util.inject.initialization.PostConstruct;
 import com.google.inject.Inject;
 
-public class EventConsumerRegistrator {
+public class EventConsumerRegistrar {
     private final EventDispatcher eventDispatcher;
 
     private final StartupListener startupListener;
 
     @Inject
-    public EventConsumerRegistrator(final EventDispatcher eventDispatcher, final StartupListener startupListener) {
+    public EventConsumerRegistrar(final EventDispatcher eventDispatcher, final StartupListener startupListener) {
         this.eventDispatcher = eventDispatcher;
         this.startupListener = startupListener;
     }

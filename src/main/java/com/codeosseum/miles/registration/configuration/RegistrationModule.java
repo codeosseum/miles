@@ -22,7 +22,7 @@ public class RegistrationModule extends MilesModule {
         bind(ServerRegistrar.class).to(DefaultServerRegistrarImpl.class).in(Singleton.class);
 
         bind(StartupListener.class).in(Singleton.class);
-        
-        bind(EventConsumerRegistrator.class).asEagerSingleton();
+
+        bind(EventConsumerRegistrar.class).asEagerSingleton();
     }
 }
