@@ -2,12 +2,16 @@ package com.codeosseum.miles.eventbus.dispatch;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 import static com.codeosseum.miles.eventbus.dispatch.GuavaEventDispatcherImpl.TypeSafeEventConsumerWrapper.wrap;
 
 public class GuavaEventDispatcherImpl implements EventDispatcher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuavaEventDispatcherImpl.class.getName());
+
     private static final String DISPATCH_FAILURE_MESSAGE = "Failed to dispatch event.";
 
     private final EventBus eventBus;
@@ -19,6 +23,8 @@ public class GuavaEventDispatcherImpl implements EventDispatcher {
     @Override
     public void dispatchEvent(final Object event) throws EventDispatchFailedException {
         try {
+            LOGGER.debug("Dispatching event {}", event);
+
             eventBus.post(Objects.requireNonNull(event));
         } catch (Exception e) {
             throw new EventDispatchFailedException(DISPATCH_FAILURE_MESSAGE, e);
@@ -33,6 +39,8 @@ public class GuavaEventDispatcherImpl implements EventDispatcher {
         // When dispatching an event, the EventBus has to loop through ALL subscribers.
         // Currently, the main benefit of this approach (avoiding the Guava EventBus lock-in) outweighs
         // this issue, however, this might become a bottleneck.
+        LOGGER.info("Registering event consumer for eventType: {}", eventType);
+
         eventBus.register(wrap(Objects.requireNonNull(eventType), Objects.requireNonNull(consumer)));
     }
 

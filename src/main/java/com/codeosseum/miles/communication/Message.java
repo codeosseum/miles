@@ -23,4 +23,12 @@ public class Message<T> {
     public T getPayload() {
         return payload;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "action='" + action + '\'' +
+                ", payload=" + payload +
+                '}';
+    }
 }

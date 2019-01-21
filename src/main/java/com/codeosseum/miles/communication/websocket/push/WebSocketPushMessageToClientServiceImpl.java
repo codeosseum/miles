@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class WebSocketPushMessageToClientServiceImpl implements PushMessageToClientService {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketPushMessageToClientServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketPushMessageToClientServiceImpl.class);
 
     private final SessionRegistry sessionRegistry;
 
@@ -29,17 +29,19 @@ public class WebSocketPushMessageToClientServiceImpl implements PushMessageToCli
     public <T> void sendMessage(long recipientId, final Message<T> message) {
         Objects.requireNonNull(message);
 
+        LOGGER.debug("Pushing WebSocket message (recipientID {}): {}", recipientId, message);
+
         try {
             final Optional<Session> sessionOptional = sessionRegistry.getSessionForId(recipientId);
 
             if (!sessionOptional.isPresent()) {
-                logger.warn("Recipient not found: {}", recipientId);
+                LOGGER.warn("Recipient not found: {}", recipientId);
                 return;
             }
 
             messageTransmitter.writeMessage(sessionOptional.get(), message.getAction(), message.getPayload());
         } catch (Exception e) {
-            logger.warn(e.toString());
+            LOGGER.warn(e.toString());
         }
     }
 }
