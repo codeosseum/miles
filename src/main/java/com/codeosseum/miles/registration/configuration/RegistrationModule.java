@@ -1,5 +1,6 @@
 package com.codeosseum.miles.registration.configuration;
 
+import com.codeosseum.miles.communication.push.PushMessageToAresService;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.registration.listener.StartupListener;
 import com.codeosseum.miles.registration.registrar.DefaultServerRegistrarImpl;
@@ -14,7 +15,7 @@ import static java.util.Arrays.asList;
 public class RegistrationModule extends MilesModule {
     @Override
     protected List<Class<?>> requires() {
-        return asList(EventDispatcher.class);
+        return asList(EventDispatcher.class, PushMessageToAresService.class);
     }
 
     @Override
