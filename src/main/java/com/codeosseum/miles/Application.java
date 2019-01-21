@@ -2,6 +2,7 @@ package com.codeosseum.miles;
 
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.heartbeat.configuration.HeartbeatModule;
 import com.codeosseum.miles.mapping.MappingModule;
 import com.codeosseum.miles.communication.http.HttpBootstrapper;
 import com.codeosseum.miles.communication.http.configuration.HttpModule;
@@ -39,7 +40,8 @@ public final class Application {
                 new WebSocketModule(),
                 new EventBusModule(),
                 new HttpModule(),
-                new RegistrationModule());
+                new RegistrationModule(),
+                new HeartbeatModule());
     }
 
     @Singleton
