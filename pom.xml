@@ -44,6 +44,7 @@
         <httpclient.version>4.3.6</httpclient.version>
         <httpasyncclient.version>4.0.2</httpasyncclient.version>
         <httpmime.version>4.3.6</httpmime.version>
+        <jgit.version>5.2.1.201812262042-r</jgit.version>
 
         <!-- PLUGIN VERSIONS -->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
@@ -113,6 +114,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpmime.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>${jgit.version}</version>
         </dependency>
     </dependencies>
 
