@@ -1,6 +1,8 @@
 package com.codeosseum.miles.heartbeat.configuration;
 
+import com.codeosseum.miles.communication.push.PushMessageToAresService;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.heartbeat.HeartbeatReporter;
 import com.codeosseum.miles.heartbeat.HeartbeatTicker;
 import com.codeosseum.miles.util.inject.MilesModule;
 import com.google.inject.Inject;
@@ -15,11 +17,13 @@ import static java.util.Arrays.asList;
 public class HeartbeatModule extends MilesModule {
     @Override
     protected List<Class<?>> requires() {
-        return asList(EventDispatcher.class);
+        return asList(EventDispatcher.class, PushMessageToAresService.class);
     }
 
     @Override
     protected void configureModule() {
+        bind(HeartbeatReporter.class).asEagerSingleton();
+
         bind(HeartbeatTicker.class).toProvider(HeartbeatTickerProvider.class).asEagerSingleton();
     }
 
