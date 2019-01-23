@@ -1,4 +1,4 @@
-package com.codeosseum.miles.chat.room;
+package com.codeosseum.miles.chat;
 
 import lombok.Value;
 

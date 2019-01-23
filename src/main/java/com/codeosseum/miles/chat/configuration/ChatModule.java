@@ -1,8 +1,8 @@
 package com.codeosseum.miles.chat.configuration;
 
+import com.codeosseum.miles.chat.ChatService;
+import com.codeosseum.miles.chat.DefaultChatServiceImpl;
 import com.codeosseum.miles.chat.controller.ChatController;
-import com.codeosseum.miles.chat.room.DefaultRoomServiceImpl;
-import com.codeosseum.miles.chat.room.RoomService;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
@@ -22,7 +22,7 @@ public class ChatModule extends MilesModule {
 
     @Override
     protected void configureModule() {
-        bind(RoomService.class).to(DefaultRoomServiceImpl.class).in(Singleton.class);
+        bind(ChatService.class).to(DefaultChatServiceImpl.class).in(Singleton.class);
 
         bind(ChatController.class).asEagerSingleton();
     }

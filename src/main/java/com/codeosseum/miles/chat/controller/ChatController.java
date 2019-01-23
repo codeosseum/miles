@@ -1,11 +1,11 @@
 package com.codeosseum.miles.chat.controller;
 
-import com.codeosseum.miles.chat.*;
 import com.codeosseum.miles.chat.controller.incoming.IncomingChatMessage;
 import com.codeosseum.miles.chat.controller.incoming.MessagesSinceRequest;
 import com.codeosseum.miles.chat.controller.outgoing.MessagesSince;
 import com.codeosseum.miles.chat.controller.outgoing.RoomsOfUser;
-import com.codeosseum.miles.chat.room.RoomService;
+import com.codeosseum.miles.chat.ChatMessage;
+import com.codeosseum.miles.chat.ChatService;
 import com.codeosseum.miles.communication.websocket.controller.JsonWebSocketController;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
@@ -32,18 +32,12 @@ public class ChatController extends JsonWebSocketController {
 
     private final ChatService chatService;
 
-    private final RoomService roomService;
-
-    private final MessageService messageService;
-
     @Inject
-    public ChatController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry, final ChatService chatService, final RoomService roomService, final MessageService messageService) {
+    public ChatController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry, final ChatService chatService) {
         super(gson, messageTransmitter);
 
         this.sessionRegistry = sessionRegistry;
         this.chatService = chatService;
-        this.roomService = roomService;
-        this.messageService = messageService;
     }
 
     @Override
@@ -62,7 +56,7 @@ public class ChatController extends JsonWebSocketController {
 
     private void getRoomsOfUser(final Session session) throws IOException  {
         final Optional<RoomsOfUser> roomsOfUserOptional = sessionRegistry.getIdForSession(session)
-                .map(roomService::getRoomsIncluding)
+                .map(chatService::getRoomsIncluding)
                 .map(RoomsOfUser::new);
 
         if (roomsOfUserOptional.isPresent()) {
@@ -82,7 +76,7 @@ public class ChatController extends JsonWebSocketController {
     private List<ChatMessage> messagesSinceRequestToMessages(final String user, final MessagesSinceRequest request) {
         final LocalDateTime since = epochMillisecondsToLocalDateTime(request.getTimestamp());
 
-        return messageService.getMessageForRoomSince(request.getRoomId(), since);
+        return chatService.getMessageForRoomSince(request.getRoomId(), since);
     }
 
     private ChatMessage incomingChatMessageToChatMessage(final String sender, final IncomingChatMessage incoming) {
