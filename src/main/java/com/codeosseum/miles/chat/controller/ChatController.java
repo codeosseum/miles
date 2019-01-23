@@ -5,6 +5,7 @@ import com.codeosseum.miles.chat.controller.incoming.IncomingChatMessage;
 import com.codeosseum.miles.chat.controller.incoming.MessagesSinceRequest;
 import com.codeosseum.miles.chat.controller.outgoing.MessagesSince;
 import com.codeosseum.miles.chat.controller.outgoing.RoomsOfUser;
+import com.codeosseum.miles.chat.room.RoomService;
 import com.codeosseum.miles.communication.websocket.controller.JsonWebSocketController;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
