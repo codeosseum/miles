@@ -3,9 +3,14 @@ package com.codeosseum.miles.chat;
 import com.codeosseum.miles.communication.Message;
 import com.codeosseum.miles.communication.push.PushMessageToClientService;
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -15,6 +20,8 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 public class DefaultChatServiceImpl implements ChatService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultChatServiceImpl.class);
+
     private static final String CHAT_MESSAGE = "chat-message";
 
     private final PushMessageToClientService pushMessageToClientService;
@@ -32,6 +39,8 @@ public class DefaultChatServiceImpl implements ChatService {
 
     @Override
     public void sendMessage(final ChatMessage message) {
+        LOGGER.info("Sending chat message by {} to room {}", message.getSender(), message.getRoomId());
+
         final Optional<Room> roomOptional = getRoomById(message.getRoomId());
 
         if (roomOptional.isPresent()) {
@@ -70,6 +79,8 @@ public class DefaultChatServiceImpl implements ChatService {
     public void createRoom(final String id, final String displayName, final List<String> participants) {
         final Room room = new Room(requireNonNull(id), requireNonNull(displayName), requireNonNull(participants));
 
+        LOGGER.info("Creating new chat room {}", room);
+
         messageMap.put(room.getId(), new LinkedList<>());
 
         rooms.add(room);
@@ -96,6 +107,8 @@ public class DefaultChatServiceImpl implements ChatService {
 
     @Override
     public void deleteAllRooms() {
+        LOGGER.info("Deleting all chat rooms.");
+
         messageMap.clear();
         rooms.clear();
     }

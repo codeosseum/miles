@@ -13,6 +13,8 @@ import com.codeosseum.miles.communication.websocket.transmission.MessageTransmit
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.eclipse.jetty.websocket.api.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -22,6 +24,8 @@ import java.util.Optional;
 import static com.codeosseum.miles.util.date.DateConversion.epochMillisecondsToLocalDateTime;
 
 public class ChatController extends JsonWebSocketController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChatController.class);
+
     private static final String INCOMING_CHAT_MESSAGE = "incoming-chat-message";
 
     private static final String GET_ROOMS_OF_USER = "get-rooms-of-user";
@@ -46,16 +50,28 @@ public class ChatController extends JsonWebSocketController {
         dispatcher.attachOnMessageHandler(GET_MESSAGES_SINCE, MessagesSinceRequest.class, this::getMessagesSince);
 
         dispatcher.attachOnSignalHandler(GET_ROOMS_OF_USER, this::getRoomsOfUser);
+
+        LOGGER.info("Attached ChatController");
     }
 
     private void incomingChatMessage(final Session session, final IncomingChatMessage payload) {
         sessionRegistry.getIdForSession(session)
                 .map(sender -> incomingChatMessageToChatMessage(sender, payload))
-                .ifPresent(chatService::sendMessage);
+                .ifPresent(message -> {
+                    LOGGER.info("Incoming chat message from {} to room {}", message.getSender(), message.getRoomId());
+                    LOGGER.debug("Chat message {}", message);
+
+                    chatService.sendMessage(message);
+                });
     }
 
     private void getRoomsOfUser(final Session session) throws IOException  {
         final Optional<RoomsOfUser> roomsOfUserOptional = sessionRegistry.getIdForSession(session)
+                .map(id -> {
+                    LOGGER.info("All rooms request for user {}", id);
+
+                    return id;
+                })
                 .map(chatService::getRoomsIncluding)
                 .map(RoomsOfUser::new);
 
@@ -66,6 +82,11 @@ public class ChatController extends JsonWebSocketController {
 
     private void getMessagesSince(final Session session, final MessagesSinceRequest request) throws IOException {
         final Optional<List<ChatMessage>> messagesOptional = sessionRegistry.getIdForSession(session)
+                .map(id -> {
+                    LOGGER.info("Messages since request for user {}", id);
+
+                    return id;
+                })
                 .map(user -> messagesSinceRequestToMessages(user, request));
 
         if (messagesOptional.isPresent()) {
