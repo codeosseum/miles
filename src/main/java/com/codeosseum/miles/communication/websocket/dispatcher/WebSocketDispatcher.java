@@ -8,6 +8,7 @@ import com.codeosseum.miles.communication.action.UnsupportedActionException;
 import com.codeosseum.miles.communication.websocket.handler.OnCloseHandler;
 import com.codeosseum.miles.communication.websocket.handler.OnConnectHandler;
 import com.codeosseum.miles.communication.websocket.handler.OnMessageHandler;
+import com.codeosseum.miles.communication.websocket.handler.OnSignalHandler;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -37,6 +38,8 @@ public class WebSocketDispatcher {
 
     private final Map<String, TypedMessageHandler<?>> messageHandlerMap;
 
+    private final Map<String, OnSignalHandler> signalHandlerMap;
+
     private final Gson gson;
 
     private final JsonParser jsonParser;
@@ -48,6 +51,7 @@ public class WebSocketDispatcher {
         this.onConnectHandlers = new HashSet<>();
         this.onCloseHandlers = new HashSet<>();
         this.messageHandlerMap = new HashMap<>();
+        this.signalHandlerMap = new HashMap<>();
 
         this.gson = gson;
         this.jsonParser = jsonParser;
@@ -67,6 +71,10 @@ public class WebSocketDispatcher {
         this.messageHandlerMap.put(requireNonNull(action), new TypedMessageHandler<>(requireNonNull(payloadType), requireNonNull(handler)));
     }
 
+    public void attachOnSignalHandler(final String action, final OnSignalHandler handler) {
+        this.signalHandlerMap.put(requireNonNull(action), requireNonNull(handler));
+    }
+
     @OnWebSocketConnect
     public void onConnect(final Session session) {
         onConnectHandlers.forEach(h -> h.handle(session));
@@ -82,7 +90,11 @@ public class WebSocketDispatcher {
         try {
             final RawMessage rawMessage = parseWebSocketString(message);
 
-            dispatchMessage(session, rawMessage);
+            if (isPayloadEmpty(rawMessage.payload)) {
+                dispatchSignal(session, rawMessage.action);
+            } else {
+                dispatchMessage(session, rawMessage);
+            }
         } catch (IOException e) {
             logger.warn(e.toString());
         } catch (Exception e) {
@@ -91,17 +103,35 @@ public class WebSocketDispatcher {
         }
     }
 
+    private boolean isPayloadEmpty(final String payload) {
+        return payload == null || payload.isEmpty();
+    }
+
+    private void dispatchSignal(final Session session, final String action) throws IOException, UnsupportedActionException {
+        final OnSignalHandler handler = getSignalHandlerForaAction(action);
+
+        handler.handle(session);
+    }
+
     @SuppressWarnings("unchecked")
     private void dispatchMessage(final Session session, final RawMessage message)
             throws IOException, MalformedMessageException, UnsupportedActionException {
-        final TypedMessageHandler typedHandler = getHandlerForAction(message.action);
+        final TypedMessageHandler typedHandler = getMessageHandlerForAction(message.action);
 
         final Object payload = jsonPayloadToObject(message.payload, typedHandler.payloadType);
 
         typedHandler.handler.handle(session, typedHandler.payloadType.cast(payload));
     }
 
-    private TypedMessageHandler<?> getHandlerForAction(final String action) throws UnsupportedActionException {
+    private OnSignalHandler getSignalHandlerForaAction(final String action) throws UnsupportedActionException {
+        if (!signalHandlerMap.containsKey(action)) {
+            throw new UnsupportedActionException(action);
+        }
+
+        return signalHandlerMap.get(action);
+    }
+
+    private TypedMessageHandler<?> getMessageHandlerForAction(final String action) throws UnsupportedActionException {
         if (!messageHandlerMap.containsKey(action)) {
             throw new UnsupportedActionException(action);
         }
