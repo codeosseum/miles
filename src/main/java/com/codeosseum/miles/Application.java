@@ -1,5 +1,6 @@
 package com.codeosseum.miles;
 
+import com.codeosseum.miles.chat.configuration.ChatModule;
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.heartbeat.configuration.HeartbeatModule;
@@ -41,7 +42,8 @@ public final class Application {
                 new EventBusModule(),
                 new HttpModule(),
                 new RegistrationModule(),
-                new HeartbeatModule());
+                new HeartbeatModule(),
+                new ChatModule());
     }
 
     @Singleton
