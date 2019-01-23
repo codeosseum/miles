@@ -1,5 +1,6 @@
 package com.codeosseum.miles;
 
+import com.codeosseum.miles.chat.ChatBootstrapper;
 import com.codeosseum.miles.chat.configuration.ChatModule;
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
@@ -54,12 +55,15 @@ public final class Application {
 
         private final HttpBootstrapper httpBootstrapper;
 
+        private final ChatBootstrapper chatBootstrapper;
+
         private final EventDispatcher eventDispatcher;
 
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final EventDispatcher eventDispatcher) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final ChatBootstrapper chatBootstrapper, final EventDispatcher eventDispatcher) {
             this.webSocketBootstrapper = webSocketBootstrapper;
             this.httpBootstrapper = httpBootstrapper;
+            this.chatBootstrapper = chatBootstrapper;
             this.eventDispatcher = eventDispatcher;
         }
 
@@ -67,6 +71,8 @@ public final class Application {
             port(PORT);
 
             webSocketBootstrapper.bootstrap();
+
+            chatBootstrapper.bootstrap();
 
             httpBootstrapper.bootstrap();
 
