@@ -26,7 +26,7 @@ public class WebSocketPushMessageToClientServiceImpl implements PushMessageToCli
     }
 
     @Override
-    public <T> void sendMessage(long recipientId, final Message<T> message) {
+    public <T> void sendMessage(String recipientId, final Message<T> message) {
         Objects.requireNonNull(message);
 
         LOGGER.debug("Pushing WebSocket message (recipientID {}): {}", recipientId, message);

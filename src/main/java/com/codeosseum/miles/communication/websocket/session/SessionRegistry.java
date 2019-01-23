@@ -13,14 +13,14 @@ public interface SessionRegistry {
 
     void removeActiveSession(Session session);
 
-    void addAuthenticatedSession(Session session, long id);
+    void addAuthenticatedSession(Session session, String id);
 
     void removeAuthenticatedSession(Session session);
 
-    Map<Long, Session> getAuthenticatedSessions();
+    Map<String, Session> getAuthenticatedSessions();
 
-    Optional<Long> getIdForSession(Session session);
+    Optional<String> getIdForSession(Session session);
 
-    Optional<Session> getSessionForId(long id);
+    Optional<Session> getSessionForId(String id);
 }
 

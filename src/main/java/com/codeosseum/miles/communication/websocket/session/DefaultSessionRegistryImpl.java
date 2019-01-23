@@ -1,9 +1,6 @@
 package com.codeosseum.miles.communication.websocket.session;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -12,9 +9,9 @@ import org.eclipse.jetty.websocket.api.Session;
 public class DefaultSessionRegistryImpl implements SessionRegistry {
     private final Set<Session> activeSessions;
 
-    private final Map<Long, Session> idToSessionMap;
+    private final Map<String, Session> idToSessionMap;
 
-    private final Map<Session, Long> sessionToIdMap;
+    private final Map<Session, String> sessionToIdMap;
 
     public DefaultSessionRegistryImpl() {
         this.activeSessions = new CopyOnWriteArraySet<>();
@@ -38,8 +35,8 @@ public class DefaultSessionRegistryImpl implements SessionRegistry {
     }
 
     @Override
-    public void addAuthenticatedSession(final Session session, final long id) {
-        idToSessionMap.put(id, session);
+    public void addAuthenticatedSession(final Session session, final String id) {
+        idToSessionMap.put(Objects.requireNonNull(id), Objects.requireNonNull(session));
         sessionToIdMap.put(session, id);
     }
 
@@ -53,18 +50,18 @@ public class DefaultSessionRegistryImpl implements SessionRegistry {
     }
 
     @Override
-    public Map<Long, Session> getAuthenticatedSessions() {
+    public Map<String, Session> getAuthenticatedSessions() {
         return Collections.unmodifiableMap(idToSessionMap);
     }
 
     @Override
-    public Optional<Long> getIdForSession(final Session session) {
+    public Optional<String> getIdForSession(final Session session) {
         return Optional.ofNullable(sessionToIdMap.get(session));
     }
 
     @Override
-    public Optional<Session> getSessionForId(final long id) {
-        return Optional.ofNullable(idToSessionMap.get(id));
+    public Optional<Session> getSessionForId(final String id) {
+        return Optional.ofNullable(idToSessionMap.get(Objects.requireNonNull(id)));
     }
 }
 
