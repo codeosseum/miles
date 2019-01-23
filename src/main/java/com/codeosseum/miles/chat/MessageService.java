@@ -8,5 +8,5 @@ public interface MessageService {
 
     List<ChatMessage> getAllMessagesForRoom(String roomId);
 
-    List<ChatMessage> getMessageForRoomSince(LocalDateTime since);
+    List<ChatMessage> getMessageForRoomSince(String roomId, LocalDateTime since);
 }
