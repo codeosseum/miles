@@ -14,6 +14,8 @@ public class MappingModule extends AbstractModule {
         bind(JsonParser.class).in(Singleton.class);
 
         bind(ObjectMapper.class).to(GsonObjectMapperImpl.class).in(Singleton.class);
+
+        bind(Json.class).to(GsonJsonImpl.class).in(Singleton.class);
     }
 
     @Provides
