@@ -1,13 +1,12 @@
 package com.codeosseum.miles.eventbus.dispatch;
 
+import com.codeosseum.miles.eventbus.Signal;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-
-import static com.codeosseum.miles.eventbus.dispatch.GuavaEventDispatcherImpl.TypeSafeEventConsumerWrapper.wrap;
 
 public class GuavaEventDispatcherImpl implements EventDispatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuavaEventDispatcherImpl.class.getName());
@@ -41,7 +40,14 @@ public class GuavaEventDispatcherImpl implements EventDispatcher {
         // this issue, however, this might become a bottleneck.
         LOGGER.info("Registering event consumer for eventType: {}", eventType);
 
-        eventBus.register(wrap(Objects.requireNonNull(eventType), Objects.requireNonNull(consumer)));
+        eventBus.register(TypeSafeEventConsumerWrapper.wrap(Objects.requireNonNull(eventType), Objects.requireNonNull(consumer)));
+    }
+
+    @Override
+    public <S extends Signal> void registerConsumer(final Class<S> signalType, final SignalConsumer consumer) {
+        LOGGER.info("Registering signal consumer for signalType: {}", signalType);
+
+        eventBus.register(TypeSafeSignalConsumerWrapper.wrap(Objects.requireNonNull(signalType), Objects.requireNonNull(consumer)));
     }
 
     public static final class TypeSafeEventConsumerWrapper<E> {
@@ -64,6 +70,28 @@ public class GuavaEventDispatcherImpl implements EventDispatcher {
             // necessary.
             if (eventType.equals(event.getClass())) {
                 consumer.accept(event);
+            }
+        }
+    }
+
+    public static final class TypeSafeSignalConsumerWrapper<S extends Signal> {
+        private final Class<S> signalType;
+
+        private final SignalConsumer consumer;
+
+        public static <S extends Signal> TypeSafeSignalConsumerWrapper<S> wrap(final Class<S> signalType, final SignalConsumer consumer) {
+            return new TypeSafeSignalConsumerWrapper<>(signalType, consumer);
+        }
+
+        private TypeSafeSignalConsumerWrapper(final Class<S> signalType, final SignalConsumer consumer) {
+            this.signalType = signalType;
+            this.consumer = consumer;
+        }
+
+        @Subscribe
+        public void handler(final S signal) {
+            if (signalType.equals(signal.getClass())) {
+                consumer.accept();
             }
         }
     }
