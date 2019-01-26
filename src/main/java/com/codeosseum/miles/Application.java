@@ -1,9 +1,10 @@
 package com.codeosseum.miles;
 
-import com.codeosseum.miles.chat.ChatBootstrapper;
 import com.codeosseum.miles.chat.configuration.ChatModule;
+import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.faultseeding.configuration.FaultSeedingModule;
 import com.codeosseum.miles.heartbeat.configuration.HeartbeatModule;
 import com.codeosseum.miles.mapping.MappingModule;
 import com.codeosseum.miles.communication.http.HttpBootstrapper;
@@ -11,8 +12,8 @@ import com.codeosseum.miles.communication.http.configuration.HttpModule;
 import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
-import com.codeosseum.miles.session.SessionBootstrapper;
 import com.codeosseum.miles.session.configuration.SessionModule;
+import com.codeosseum.miles.util.inject.attach.WebSocketControllerAttacher;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -47,7 +48,8 @@ public final class Application {
                 new RegistrationModule(),
                 new HeartbeatModule(),
                 new ChatModule(),
-                new SessionModule());
+                new SessionModule(),
+                new FaultSeedingModule());
     }
 
     @Singleton
@@ -58,19 +60,16 @@ public final class Application {
 
         private final HttpBootstrapper httpBootstrapper;
 
-        private final ChatBootstrapper chatBootstrapper;
-
         private final EventDispatcher eventDispatcher;
 
-        private final SessionBootstrapper sessionBootstrapper;
+        private final WebSocketDispatcher webSocketDispatcher;
 
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final ChatBootstrapper chatBootstrapper, final EventDispatcher eventDispatcher, final SessionBootstrapper sessionBootstrapper) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final EventDispatcher eventDispatcher, final WebSocketDispatcher webSocketDispatcher) {
             this.webSocketBootstrapper = webSocketBootstrapper;
             this.httpBootstrapper = httpBootstrapper;
-            this.chatBootstrapper = chatBootstrapper;
             this.eventDispatcher = eventDispatcher;
-            this.sessionBootstrapper = sessionBootstrapper;
+            this.webSocketDispatcher = webSocketDispatcher;
         }
 
         private void bootstrap() {
@@ -78,11 +77,9 @@ public final class Application {
 
             webSocketBootstrapper.bootstrap();
 
-            chatBootstrapper.bootstrap();
+            WebSocketControllerAttacher.INSTANCE.attachControllersTo(webSocketDispatcher);
 
             httpBootstrapper.bootstrap();
-
-            sessionBootstrapper.bootstrap();
 
             get("/", (request, response) -> "Hello, World!");
 

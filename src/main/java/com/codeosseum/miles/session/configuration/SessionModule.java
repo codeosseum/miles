@@ -6,7 +6,6 @@ import com.codeosseum.miles.communication.websocket.transmission.MessageTransmit
 import com.codeosseum.miles.session.controller.SessionController;
 import com.codeosseum.miles.util.inject.MilesModule;
 import com.google.gson.Gson;
-import com.google.inject.Singleton;
 
 import java.util.List;
 
@@ -20,6 +19,6 @@ public class SessionModule extends MilesModule {
 
     @Override
     protected void configureModule() {
-        bind(SessionController.class).in(Singleton.class);
+        bind(SessionController.class).asEagerSingleton();
     }
 }

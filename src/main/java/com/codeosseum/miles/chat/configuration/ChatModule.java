@@ -1,6 +1,5 @@
 package com.codeosseum.miles.chat.configuration;
 
-import com.codeosseum.miles.chat.ChatBootstrapper;
 import com.codeosseum.miles.chat.ChatService;
 import com.codeosseum.miles.chat.DefaultChatServiceImpl;
 import com.codeosseum.miles.chat.controller.ChatController;
@@ -25,8 +24,6 @@ public class ChatModule extends MilesModule {
     protected void configureModule() {
         bind(ChatService.class).to(DefaultChatServiceImpl.class).in(Singleton.class);
 
-        bind(ChatController.class).in(Singleton.class);
-
-        bind(ChatBootstrapper.class).in(Singleton.class);
+        bind(ChatController.class).asEagerSingleton();
     }
 }
