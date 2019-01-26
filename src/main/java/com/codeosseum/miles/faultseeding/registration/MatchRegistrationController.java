@@ -24,7 +24,6 @@ public class MatchRegistrationController extends JsonHttpController {
 
     @Override
     public void attach() {
-        LOGGER.info("hai");
         put(NEW_MATCH, APPLICATION_JSON, this::registerNewMatch);
     }
 

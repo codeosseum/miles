@@ -13,6 +13,7 @@ import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
 import com.codeosseum.miles.session.configuration.SessionModule;
+import com.codeosseum.miles.util.inject.attach.HttpControllerAttacher;
 import com.codeosseum.miles.util.inject.attach.WebSocketControllerAttacher;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -80,6 +81,8 @@ public final class Application {
             WebSocketControllerAttacher.INSTANCE.attachControllersTo(webSocketDispatcher);
 
             httpBootstrapper.bootstrap();
+
+            HttpControllerAttacher.INSTANCE.attachControllers();
 
             get("/", (request, response) -> "Hello, World!");
 

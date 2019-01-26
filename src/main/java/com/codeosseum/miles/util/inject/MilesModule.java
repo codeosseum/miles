@@ -1,5 +1,6 @@
 package com.codeosseum.miles.util.inject;
 
+import com.codeosseum.miles.util.inject.attach.HttpControllerAttacher;
 import com.codeosseum.miles.util.inject.attach.WebSocketControllerAttacher;
 import com.codeosseum.miles.util.inject.initialization.PostConstructListener;
 import com.google.inject.AbstractModule;
@@ -22,6 +23,8 @@ public class MilesModule extends AbstractModule {
         bindListener(Matchers.any(), PostConstructListener.INSTANCE);
 
         bindListener(Matchers.any(), WebSocketControllerAttacher.INSTANCE);
+
+        bindListener(Matchers.any(), HttpControllerAttacher.INSTANCE);
     }
 
     protected List<Class<?>> requires() {
