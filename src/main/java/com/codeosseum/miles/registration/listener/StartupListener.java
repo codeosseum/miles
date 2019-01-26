@@ -1,13 +1,13 @@
 package com.codeosseum.miles.registration.listener;
 
 import com.codeosseum.miles.StartupSignal;
-import com.codeosseum.miles.eventbus.dispatch.EventConsumer;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
 import com.codeosseum.miles.registration.ServerRegisteredSignal;
 import com.codeosseum.miles.registration.registrar.ServerRegistrar;
 import com.google.inject.Inject;
 
-public class StartupListener implements EventConsumer<StartupSignal> {
+public class StartupListener implements SignalConsumer {
     private final ServerRegistrar serverRegistrar;
 
     private final EventDispatcher eventDispatcher;
@@ -22,7 +22,7 @@ public class StartupListener implements EventConsumer<StartupSignal> {
     }
 
     @Override
-    public void accept(final StartupSignal startupSignal) {
+    public void accept() {
         serverRegistrar.register();
 
         eventDispatcher.dispatchEvent(new ServerRegisteredSignal());

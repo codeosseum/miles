@@ -1,6 +1,5 @@
 package com.codeosseum.miles.heartbeat;
 
-import com.codeosseum.miles.communication.Message;
 import com.codeosseum.miles.communication.push.PushMessageToAresService;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.registration.ServerRegisteredSignal;
@@ -35,11 +34,11 @@ public class HeartbeatReporter {
         this.shouldSendMessage = new AtomicBoolean(false);
     }
 
-    private void consumeServerRegisteredSignal(final ServerRegisteredSignal signal) {
+    private void consumeServerRegisteredSignal() {
         shouldSendMessage.set(true);
     }
 
-    private void consumeHeartbeatSignal(final HeartbeatSignal signal) {
+    private void consumeHeartbeatSignal() {
         if (shouldSendMessage.get()) {
             LOGGER.info("Sending heartbeat event to Ares");
 

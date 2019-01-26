@@ -21,7 +21,7 @@ public class ChallengeLoaderListener {
         eventDispatcher.registerConsumer(StartupSignal.class, this::onStartup);
     }
 
-    private void onStartup(final StartupSignal signal) {
+    private void onStartup() {
         try {
             challengeRepository.loadChallenges();
         } catch (Exception e) {
