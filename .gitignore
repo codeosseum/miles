@@ -14,3 +14,6 @@ buildNumber.properties
 # IntelliJ IDEA files
 *.iml
 .idea/
+
+# The cloned quaestiones repository.
+challenges/
