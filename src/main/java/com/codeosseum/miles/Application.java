@@ -1,5 +1,6 @@
 package com.codeosseum.miles;
 
+import com.codeosseum.miles.challenge.configuration.ChallengeModule;
 import com.codeosseum.miles.chat.configuration.ChatModule;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
@@ -51,7 +52,8 @@ public final class Application {
                 new ChatModule(),
                 new SessionModule(),
                 new FaultSeedingModule(),
-                new PlayerModule());
+                new PlayerModule(),
+                new ChallengeModule());
     }
 
     @Singleton
