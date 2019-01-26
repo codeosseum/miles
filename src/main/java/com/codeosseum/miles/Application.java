@@ -84,8 +84,6 @@ public final class Application {
 
             HttpControllerAttacher.INSTANCE.attachControllers();
 
-            get("/", (request, response) -> "Hello, World!");
-
             awaitInitialization();
 
             eventDispatcher.dispatchEvent(new StartupSignal());
