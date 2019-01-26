@@ -11,6 +11,7 @@ import com.codeosseum.miles.communication.http.HttpBootstrapper;
 import com.codeosseum.miles.communication.http.configuration.HttpModule;
 import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
+import com.codeosseum.miles.player.configuration.PlayerModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
 import com.codeosseum.miles.session.configuration.SessionModule;
 import com.codeosseum.miles.util.inject.attach.HttpControllerAttacher;
@@ -27,7 +28,6 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 import static java.util.Arrays.asList;
 import static spark.Spark.awaitInitialization;
-import static spark.Spark.get;
 import static spark.Spark.port;
 
 public final class Application {
@@ -50,7 +50,8 @@ public final class Application {
                 new HeartbeatModule(),
                 new ChatModule(),
                 new SessionModule(),
-                new FaultSeedingModule());
+                new FaultSeedingModule(),
+                new PlayerModule());
     }
 
     @Singleton

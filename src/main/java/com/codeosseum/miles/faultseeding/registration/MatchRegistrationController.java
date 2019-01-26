@@ -25,6 +25,8 @@ public class MatchRegistrationController extends JsonHttpController {
     @Override
     public void attach() {
         put(NEW_MATCH, APPLICATION_JSON, this::registerNewMatch);
+
+        LOGGER.info("Attached Fault Seeding MatchRegistrationController");
     }
 
     private Object registerNewMatch(final Request request, final Response response) {
