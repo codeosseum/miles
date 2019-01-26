@@ -4,6 +4,7 @@ import com.codeosseum.miles.communication.websocket.controller.JsonWebSocketCont
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
+import com.codeosseum.miles.player.PlayerRegistry;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.eclipse.jetty.websocket.api.Session;
@@ -15,11 +16,14 @@ public class SessionController extends JsonWebSocketController {
 
     private final SessionRegistry sessionRegistry;
 
+    private final PlayerRegistry playerRegistry;
+
     @Inject
-    public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry) {
+    public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry, final PlayerRegistry playerRegistry) {
         super(gson, messageTransmitter);
 
         this.sessionRegistry = sessionRegistry;
+        this.playerRegistry = playerRegistry;
     }
 
     @Override
@@ -40,13 +44,10 @@ public class SessionController extends JsonWebSocketController {
     }
 
     private void onHello(final Session session, final HelloMessage payload) {
-        // TODO: Query users
-        final boolean userIsOnTheList = true;
-
         final boolean canAuthenticate =
                 sessionNotAuthenticated(session)
                 && userNotAuthenticated(payload.getUsername())
-                && userIsOnTheList;
+                && userIsParticipantOfTheMatch(payload.getUsername());
 
         if (canAuthenticate) {
             sessionRegistry.addAuthenticatedSession(session, payload.getUsername());
@@ -65,5 +66,9 @@ public class SessionController extends JsonWebSocketController {
 
     private boolean userNotAuthenticated(final String username) {
         return !sessionRegistry.getSessionForId(username).isPresent();
+    }
+
+    private boolean userIsParticipantOfTheMatch(final String username) {
+        return playerRegistry.hasPlayer(username);
     }
 }
