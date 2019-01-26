@@ -24,6 +24,8 @@ public class ChallengeLoaderListener {
     private void onStartup() {
         try {
             challengeRepository.loadChallenges();
+
+            eventDispatcher.dispatchEvent(new ChallengesLoadedSignal());
         } catch (Exception e) {
             // TODO: Better error handling
             LOGGER.error("Could not load git repository", e);
