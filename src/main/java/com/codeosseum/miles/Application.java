@@ -11,6 +11,8 @@ import com.codeosseum.miles.communication.http.configuration.HttpModule;
 import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
+import com.codeosseum.miles.session.SessionBootstrapper;
+import com.codeosseum.miles.session.configuration.SessionModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -44,7 +46,8 @@ public final class Application {
                 new HttpModule(),
                 new RegistrationModule(),
                 new HeartbeatModule(),
-                new ChatModule());
+                new ChatModule(),
+                new SessionModule());
     }
 
     @Singleton
@@ -59,12 +62,15 @@ public final class Application {
 
         private final EventDispatcher eventDispatcher;
 
+        private final SessionBootstrapper sessionBootstrapper;
+
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final ChatBootstrapper chatBootstrapper, final EventDispatcher eventDispatcher) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final ChatBootstrapper chatBootstrapper, final EventDispatcher eventDispatcher, final SessionBootstrapper sessionBootstrapper) {
             this.webSocketBootstrapper = webSocketBootstrapper;
             this.httpBootstrapper = httpBootstrapper;
             this.chatBootstrapper = chatBootstrapper;
             this.eventDispatcher = eventDispatcher;
+            this.sessionBootstrapper = sessionBootstrapper;
         }
 
         private void bootstrap() {
@@ -75,6 +81,8 @@ public final class Application {
             chatBootstrapper.bootstrap();
 
             httpBootstrapper.bootstrap();
+
+            sessionBootstrapper.bootstrap();
 
             get("/", (request, response) -> "Hello, World!");
 

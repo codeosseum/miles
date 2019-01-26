@@ -1,10 +1,11 @@
-package com.codeosseum.miles.session;
+package com.codeosseum.miles.session.controller;
 
 import com.codeosseum.miles.communication.websocket.controller.JsonWebSocketController;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.google.gson.Gson;
+import com.google.inject.Inject;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ public class SessionController extends JsonWebSocketController {
 
     private final SessionRegistry sessionRegistry;
 
+    @Inject
     public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry) {
         super(gson, messageTransmitter);
 
@@ -24,7 +26,11 @@ public class SessionController extends JsonWebSocketController {
     public void attach(final WebSocketDispatcher dispatcher) {
         dispatcher.attachOnConnectHandler(this::onConnectionOpen);
 
+        dispatcher.attachOnMessageHandler(HelloMessage.ACTION, HelloMessage.class, this::onHello);
+
         dispatcher.attachOnCloseHandler(this::onConnectionClose);
+
+        LOGGER.info("Attached SessionController");
     }
 
     private void onConnectionOpen(final Session session) {
@@ -33,9 +39,31 @@ public class SessionController extends JsonWebSocketController {
         sessionRegistry.addActiveSession(session);
     }
 
+    private void onHello(final Session session, final HelloMessage payload) {
+        // TODO: Query users
+        final boolean userIsOnTheList = true;
+
+        final boolean canAuthenticate =
+                sessionNotAuthenticated(session)
+                && userNotAuthenticated(payload.getUsername())
+                && userIsOnTheList;
+
+        if (canAuthenticate) {
+            sessionRegistry.addAuthenticatedSession(session, payload.getUsername());
+        }
+    }
+
     private void onConnectionClose(final Session session, final int statusCode, final String reason) {
         LOGGER.info("WS connection closed at {} with statusCode {} and reason {}", session.getRemoteAddress(), statusCode, reason);
 
         sessionRegistry.removeActiveSession(session);
+    }
+
+    private boolean sessionNotAuthenticated(final Session session) {
+        return !sessionRegistry.getIdForSession(session).isPresent();
+    }
+
+    private boolean userNotAuthenticated(final String username) {
+        return !sessionRegistry.getSessionForId(username).isPresent();
     }
 }
