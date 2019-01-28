@@ -53,7 +53,8 @@ public final class Application {
                 new SessionModule(),
                 new FaultSeedingModule(),
                 new PlayerModule(),
-                new ChallengeModule());
+                new ChallengeModule(),
+                new FaultSeedingModule());
     }
 
     @Singleton

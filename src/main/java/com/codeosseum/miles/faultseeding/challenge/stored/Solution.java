@@ -1,7 +1,9 @@
 package com.codeosseum.miles.faultseeding.challenge.stored;
 
+import lombok.Builder;
 import lombok.Value;
 
+@Builder
 @Value
 public class Solution {
     private final String id;
