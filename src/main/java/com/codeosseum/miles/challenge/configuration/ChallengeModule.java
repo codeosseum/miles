@@ -20,8 +20,8 @@ public class ChallengeModule extends MilesModule {
 
     @Override
     protected void configureModule() {
-        bind(ChallengeRepository.class).to(GitChallengeRepositoryImpl.class).in(Singleton.class);
+        bindSingleton(ChallengeRepository.class, GitChallengeRepositoryImpl.class);
 
-        bind(ChallengeLoaderListener.class).asEagerSingleton();
+        bindEagerSingleton(ChallengeLoaderListener.class);
     }
 }

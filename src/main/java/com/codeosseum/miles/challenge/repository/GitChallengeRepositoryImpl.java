@@ -34,6 +34,8 @@ public class GitChallengeRepositoryImpl implements ChallengeRepository {
 
     private Map<String, String> translationMap;
 
+    private final Object mapLock = new Object();
+
     private final Json json;
 
     @Inject
@@ -59,7 +61,7 @@ public class GitChallengeRepositoryImpl implements ChallengeRepository {
         try {
             cloneRepository();
 
-            translationMap = loadTranslations();
+            this.translationMap = loadTranslations();
 
             LOGGER.info("Loaded challenge translation map {}", translationMap);
         } catch (Exception e) {
