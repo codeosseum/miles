@@ -1,8 +1,8 @@
-package com.codeosseum.miles.code.execution.listeners;
+package com.codeosseum.miles.code.execution.listener.listeners;
 
 import java.util.List;
 
-import com.codeosseum.miles.code.execution.CodeExecutionListener;
+import com.codeosseum.miles.code.execution.listener.CodeExecutionListener;
 import org.graalvm.polyglot.Context;
 
 import static java.util.Objects.requireNonNull;
