@@ -61,7 +61,11 @@ public class DefaultCodeExecutorImpl implements CodeExecutor {
 
         listeners.forEach(listener -> listener.onContextBuild(builder));
 
-        return builder.build();
+        final Context context = builder.build();
+
+        listeners.forEach(listener -> listener.onContextBuilt(context));
+
+        return context;
     }
 
     private Value runOnExecutionSuccessfulListeners(final Source source, final Value originalValue) {

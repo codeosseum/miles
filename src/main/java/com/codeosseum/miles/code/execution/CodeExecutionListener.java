@@ -11,6 +11,10 @@ public abstract class CodeExecutionListener {
 
     }
 
+    public void onContextBuilt(final Context context) {
+
+    }
+
     public Optional<Source> onBeforeExecute(final Source source, final Context context) {
         return Optional.empty();
     }
