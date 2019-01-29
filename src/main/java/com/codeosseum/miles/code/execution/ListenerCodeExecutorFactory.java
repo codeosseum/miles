@@ -5,23 +5,24 @@ import java.util.List;
 
 import org.graalvm.polyglot.Engine;
 
-public class DefaultCodeExecutorFactoryImpl implements CodeExecutorFactory {
+import static java.util.Objects.requireNonNull;
+
+public class ListenerCodeExecutorFactory {
     private final Engine engine;
 
     private final List<CodeExecutionListener> defaultListeners;
 
-    public DefaultCodeExecutorFactoryImpl(final Engine engine, final List<CodeExecutionListener> defaultListeners) {
+    public ListenerCodeExecutorFactory(final Engine engine, final List<CodeExecutionListener> defaultListeners) {
         this.engine = engine;
         this.defaultListeners = defaultListeners;
     }
 
-    @Override
-    public CodeExecutor makeCodeExecutor(final List<CodeExecutionListener> listeners) {
+    public ListenerCodeExecutor makeCodeExecutor(final List<CodeExecutionListener> listeners) {
         final List<CodeExecutionListener> finalListeners = new ArrayList<>();
 
         finalListeners.addAll(defaultListeners);
-        finalListeners.addAll(listeners);
+        finalListeners.addAll(requireNonNull(listeners));
 
-        return new DefaultCodeExecutorImpl(engine, finalListeners);
+        return new ListenerCodeExecutor(engine, finalListeners);
     }
 }

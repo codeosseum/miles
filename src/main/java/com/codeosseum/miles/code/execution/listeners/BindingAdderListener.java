@@ -21,7 +21,7 @@ public class BindingAdderListener extends CodeExecutionListener {
     }
 
     @Override
-    public void onContextBuilt(final Context context) {
+    public void onContextCreated(final Context context) {
         bindings.forEach((key, value) -> context.getBindings(JAVASCRIPT).putMember(key, value));
     }
 }

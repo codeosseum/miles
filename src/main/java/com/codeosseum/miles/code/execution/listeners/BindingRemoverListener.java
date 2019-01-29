@@ -21,7 +21,7 @@ public class BindingRemoverListener extends CodeExecutionListener {
     }
 
     @Override
-    public void onContextBuilt(final Context context) {
+    public void onContextCreated(final Context context) {
         bindings.forEach(name -> context.getBindings(JAVASCRIPT).removeMember(name));
     }
 }
