@@ -3,6 +3,7 @@ package com.codeosseum.miles.faultseeding.configuration;
 import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.registration.MatchRegistrationController;
 import com.codeosseum.miles.faultseeding.submission.configuration.SubmissionModule;
+import com.codeosseum.miles.faultseeding.task.configuration.TaskModule;
 import com.codeosseum.miles.util.inject.MilesModule;
 import com.google.gson.Gson;
 import com.google.inject.Module;
@@ -19,7 +20,10 @@ public class FaultSeedingModule extends MilesModule {
 
     @Override
     protected List<Module> installs() {
-        return asList(new ChallengeModule(), new SubmissionModule());
+        return asList(
+                new ChallengeModule(),
+                new SubmissionModule(),
+                new TaskModule());
     }
 
     @Override
