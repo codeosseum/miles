@@ -17,11 +17,15 @@ import com.codeosseum.miles.faultseeding.challenge.stored.StoredChallengeReposit
 import com.codeosseum.miles.faultseeding.task.Task;
 import com.google.inject.Inject;
 import lombok.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 public class DefaultTaskRepositoryImpl implements TaskRepository {
+    private final Logger LOGGER = LoggerFactory.getLogger(DefaultTaskRepositoryImpl.class);
+
     private final StoredChallengeRepository challengeRepository;
 
     private final Random random;
@@ -37,12 +41,18 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> getTaskWithDifficulty(final int minDifficulty, final int maxDifficulty) {
+        LOGGER.info("Searching for a random task in difficulty range: {} - {}", minDifficulty, maxDifficulty);
+
         return findDifficultySpan(minDifficulty, maxDifficulty)
                 .flatMap(this::randomTaskInSpan);
     }
 
-    public void reloadChallenges() {
+    public void reloadTasks() {
+        LOGGER.info("Reloading tasks");
+
         final List<TaskSeed> newSeeds = getAllStoredTaskSeeds();
+
+        LOGGER.info("{} task seeds created", newSeeds.size());
 
         taskSeeds.clear();
 
@@ -50,8 +60,8 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
     }
 
     private Optional<Span> findDifficultySpan(final int minDifficulty, final int maxDifficulty) {
-        final Optional<Integer> minIndexOptional = findFirstSeedIndexWithDifficulty(minDifficulty);
-        final Optional<Integer> maxIndexOptional = findFirstSeedIndexWithDifficulty(maxDifficulty);
+        final Optional<Integer> minIndexOptional = findFirstWithDifficultyAtLeast(minDifficulty);
+        final Optional<Integer> maxIndexOptional = findFirstWithDifficultyAtMost(maxDifficulty);
 
         if (minIndexOptional.isPresent() && maxIndexOptional.isPresent()) {
             final int min = minIndexOptional.get();
@@ -61,8 +71,12 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
                 return Optional.empty();
             }
 
+            LOGGER.info("Number of candidate tasks: {}", max - min + 1);
+
             return Optional.of(new Span(min, max));
         } else {
+            LOGGER.info("No task found in the requested difficulty span.");
+
             return Optional.empty();
         }
     }
@@ -86,6 +100,8 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
     }
 
     private Task taskFromSeed(final TaskSeed seed) throws IOException {
+        LOGGER.info("Creating task from seed: {} - {}", seed.getChallenge().getId(), seed.getSolution().getId());
+
         final String description = readFileContents(seed.getChallenge().getDescriptionPath());
         final String evaluator = readFileContents(seed.getChallenge().getEvaluatorEntrypointPath());
         final String solution = readFileContents(seed.getSolution().getEntrypointPath());
@@ -113,14 +129,26 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
                 .map(solution -> new TaskSeed(challenge, solution, challenge.getDifficulty() + solution.getDifficulty()));
     }
 
-    private Optional<Integer> findFirstSeedIndexWithDifficulty(final int difficulty) {
-        final int index = Collections.binarySearch(taskSeeds, searchSeed(difficulty), comparing(TaskSeed::getDifficulty));
-
-        if (index < 0) {
-            return Optional.empty();
-        } else {
-            return Optional.of(index);
+    private Optional<Integer> findFirstWithDifficultyAtLeast(final int difficulty) {
+        // TODO: This is O(n), use binary search instead.
+        for (int i = 0; i < taskSeeds.size(); ++i) {
+            if (taskSeeds.get(i).getDifficulty() >= difficulty) {
+                return Optional.of(i);
+            }
         }
+
+        return Optional.empty();
+    }
+
+    private Optional<Integer> findFirstWithDifficultyAtMost(final int difficulty) {
+        // TODO: This is O(n), use binary search instead.
+        for (int i = taskSeeds.size() - 1; i >= 0; --i) {
+            if (taskSeeds.get(i).getDifficulty() <= difficulty) {
+                return Optional.of(i);
+            }
+        }
+
+        return Optional.empty();
     }
 
     private TaskSeed searchSeed(final int difficulty) {
@@ -128,6 +156,8 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
     }
 
     private String readFileContents(final String path) throws IOException {
+        LOGGER.debug("Read file {}", path);
+
         final byte[] rawContents = Files.readAllBytes(Paths.get(path));
 
         return new String(rawContents, Charset.defaultCharset());

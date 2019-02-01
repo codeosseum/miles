@@ -2,7 +2,7 @@ package com.codeosseum.miles.faultseeding.challenge.configuation;
 
 import com.codeosseum.miles.challenge.repository.ChallengeRepository;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
-import com.codeosseum.miles.faultseeding.challenge.ChallengesLoadedListener;
+import com.codeosseum.miles.faultseeding.task.repository.ChallengesLoadedListener;
 import com.codeosseum.miles.faultseeding.challenge.stored.DefaultStoredChallengeRepositoryImpl;
 import com.codeosseum.miles.faultseeding.challenge.stored.StoredChallengeRepository;
 import com.codeosseum.miles.mapping.Json;

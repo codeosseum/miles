@@ -5,6 +5,7 @@ import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatch
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.google.gson.Gson;
+import com.google.inject.Inject;
 import lombok.Value;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -13,6 +14,7 @@ public class SubmissionController extends JsonWebSocketController {
 
     private final SessionRegistry sessionRegistry;
 
+    @Inject
     public SubmissionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry) {
         super(gson, messageTransmitter);
         this.sessionRegistry = sessionRegistry;
