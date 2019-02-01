@@ -15,6 +15,7 @@ import com.codeosseum.miles.communication.websocket.configuration.WebSocketModul
 import com.codeosseum.miles.player.configuration.PlayerModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
 import com.codeosseum.miles.session.configuration.SessionModule;
+import com.codeosseum.miles.util.configuration.UtilModule;
 import com.codeosseum.miles.util.inject.attach.HttpControllerAttacher;
 import com.codeosseum.miles.util.inject.attach.WebSocketControllerAttacher;
 import com.google.inject.Inject;
@@ -54,7 +55,8 @@ public final class Application {
                 new FaultSeedingModule(),
                 new PlayerModule(),
                 new ChallengeModule(),
-                new FaultSeedingModule());
+                new FaultSeedingModule(),
+                new UtilModule());
     }
 
     @Singleton
