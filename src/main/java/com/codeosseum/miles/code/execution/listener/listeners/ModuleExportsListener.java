@@ -25,7 +25,7 @@ public class ModuleExportsListener extends CodeExecutionListener {
         postExecutionContext.getContext().getBindings(JAVASCRIPT).removeMember("module");
     }
 
-    public Value getModuleExports() {
+    public Value get() {
         if (isNull(moduleBinding)) {
              return null;
         } else {

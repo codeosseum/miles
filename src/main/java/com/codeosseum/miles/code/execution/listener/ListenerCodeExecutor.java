@@ -1,5 +1,6 @@
 package com.codeosseum.miles.code.execution.listener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.codeosseum.miles.code.execution.CodeExecutionException;
@@ -25,7 +26,7 @@ public class ListenerCodeExecutor implements CodeExecutor {
 
     public ListenerCodeExecutor(final Engine engine, final List<CodeExecutionListener> listeners) {
         this.engine = engine;
-        this.listeners = listeners;
+        this.listeners = new ArrayList<>(listeners);
         this.context = makeContext(engine, listeners);
     }
 
