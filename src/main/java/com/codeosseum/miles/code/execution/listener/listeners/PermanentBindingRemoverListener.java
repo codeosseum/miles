@@ -7,16 +7,16 @@ import org.graalvm.polyglot.Context;
 
 import static java.util.Objects.requireNonNull;
 
-public class BindingRemoverListener extends CodeExecutionListener {
+public class PermanentBindingRemoverListener extends CodeExecutionListener {
     private static final String JAVASCRIPT = "js";
 
     private final List<String> bindings;
 
-    public static BindingRemoverListener fromBindings(List<String> bindings) {
-        return new BindingRemoverListener(requireNonNull(bindings));
+    public static PermanentBindingRemoverListener fromBindings(List<String> bindings) {
+        return new PermanentBindingRemoverListener(requireNonNull(bindings));
     }
 
-    private BindingRemoverListener(List<String> bindings) {
+    private PermanentBindingRemoverListener(List<String> bindings) {
         this.bindings = bindings;
     }
 

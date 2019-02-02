@@ -12,7 +12,6 @@ import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class ListenerCodeExecutor implements CodeExecutor {
@@ -43,6 +42,16 @@ public class ListenerCodeExecutor implements CodeExecutor {
         return postExecutionContext.getValue();
     }
 
+    public Value executeWithListeners(final Source source, final List<CodeExecutionListener> listeners) throws CodeExecutionException {
+        try {
+            this.listeners.addAll(listeners);
+
+            return this.execute(source);
+        } finally {
+            this.listeners.removeAll(listeners);
+        }
+    }
+
     @Override
     public void close() throws Exception {
         if (nonNull(context)) {
@@ -54,6 +63,8 @@ public class ListenerCodeExecutor implements CodeExecutor {
         try {
             listeners.forEach(listener -> listener.onBeforeExecute(preExecutionContext));
         } catch (final Exception e) {
+            e.printStackTrace();
+
             final PostExecutionContext postExecutionContext = new PostExecutionContext(false, preExecutionContext.source, context);
 
             afterExecute(postExecutionContext);
@@ -75,7 +86,7 @@ public class ListenerCodeExecutor implements CodeExecutor {
     }
 
     private void afterExecute(final PostExecutionContext postExecutionContext) throws CodeExecutionException {
-        final boolean shouldThrow = isNull(postExecutionContext.getException());
+        final boolean shouldThrow = nonNull(postExecutionContext.getException());
 
         try {
             listeners.forEach(listener -> listener.onAfterExecute(postExecutionContext));
