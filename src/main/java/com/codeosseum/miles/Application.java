@@ -52,7 +52,6 @@ public final class Application {
                 new HeartbeatModule(),
                 new ChatModule(),
                 new SessionModule(),
-                new FaultSeedingModule(),
                 new PlayerModule(),
                 new ChallengeModule(),
                 new FaultSeedingModule(),
