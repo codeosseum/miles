@@ -54,7 +54,7 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
         try {
             testFunction = getExportedValue(Source.create(JAVASCRIPT, submission));
         } catch (final Exception e) {
-            return EvaluationResult.submissionError(e);
+            return EvaluationResult.submissionError(outputConverter.convertToString(e));
         }
 
         final Object erroneousOutput = computeErroneousOutput(testFunction);

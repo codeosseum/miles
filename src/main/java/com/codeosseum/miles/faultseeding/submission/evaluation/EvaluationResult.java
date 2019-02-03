@@ -8,23 +8,23 @@ import static java.util.Objects.requireNonNull;
 public class EvaluationResult {
     private final Status status;
 
-    private final Exception submissionException;
+    private final String submissionError;
 
     private final String actualOutput;
 
     private final String expectedOutput;
 
-    public static EvaluationResult submissionError(final Exception submissionException) {
-        return new EvaluationResult(Status.SUBMISSION_ERROR, requireNonNull(submissionException), null, null);
+    public static EvaluationResult submissionError(final String submissionError) {
+        return new EvaluationResult(Status.SUBMISSION_ERROR, requireNonNull(submissionError), null, null);
     }
 
     public static EvaluationResult evaluatedSubmission(final Status status, final String actualOutput, final String expectedOutput) {
         return new EvaluationResult(requireNonNull(status), null, requireNonNull(actualOutput), requireNonNull(expectedOutput));
     }
 
-    private EvaluationResult(final Status status, final Exception submissionException, final String actualOutput, final String expectedOutput) {
+    private EvaluationResult(final Status status, final String submissionError, final String actualOutput, final String expectedOutput) {
         this.status = status;
-        this.submissionException = submissionException;
+        this.submissionError = submissionError;
         this.actualOutput = actualOutput;
         this.expectedOutput = expectedOutput;
     }
