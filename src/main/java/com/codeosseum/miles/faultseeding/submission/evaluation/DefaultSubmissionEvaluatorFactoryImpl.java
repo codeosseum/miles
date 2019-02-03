@@ -1,6 +1,11 @@
 package com.codeosseum.miles.faultseeding.submission.evaluation;
 
 import com.codeosseum.miles.code.execution.listener.ListenerCodeExecutorFactory;
+import com.codeosseum.miles.code.output.comparator.JavaOutputComparator;
+import com.codeosseum.miles.code.output.comparator.OutputComparator;
+import com.codeosseum.miles.code.output.converter.ComparableOutputConverter;
+import com.codeosseum.miles.code.output.converter.OutputConverter;
+import com.codeosseum.miles.code.output.converter.PresentableOutputConverter;
 import com.codeosseum.miles.faultseeding.task.Task;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -20,6 +25,9 @@ public class DefaultSubmissionEvaluatorFactoryImpl implements SubmissionEvaluato
 
     @Override
     public SubmissionEvaluator evaluatorForTask(final Task task) {
-        return new DefaultSubmissionEvaluatorImpl(executorFactory.makeCodeExecutor(emptyList()), requireNonNull(task));
+        final OutputConverter converter = new PresentableOutputConverter();
+        final OutputComparator comparator = new JavaOutputComparator(new ComparableOutputConverter());
+
+        return new DefaultSubmissionEvaluatorImpl(executorFactory.makeCodeExecutor(emptyList()), comparator, converter, requireNonNull(task));
     }
 }
