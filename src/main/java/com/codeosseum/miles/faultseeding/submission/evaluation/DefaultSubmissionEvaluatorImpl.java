@@ -57,6 +57,7 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
             return EvaluationResult.submissionError(outputConverter.convertToString(e));
         }
 
+        // TODO: Investigate (and if necessary implement) Promise support.
         final Object erroneousOutput = computeErroneousOutput(testFunction);
         final Object perfectOutput = computePerfectOutput(testFunction);
 
