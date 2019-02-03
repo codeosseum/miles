@@ -64,8 +64,6 @@ public class ListenerCodeExecutor implements CodeExecutor {
         try {
             listeners.forEach(listener -> listener.onBeforeExecute(preExecutionContext));
         } catch (final Exception e) {
-            e.printStackTrace();
-
             final PostExecutionContext postExecutionContext = new PostExecutionContext(false, preExecutionContext.source, context);
 
             afterExecute(postExecutionContext);
@@ -117,8 +115,6 @@ public class ListenerCodeExecutor implements CodeExecutor {
 
         return context;
     }
-
-
 
     @Data
     @AllArgsConstructor
