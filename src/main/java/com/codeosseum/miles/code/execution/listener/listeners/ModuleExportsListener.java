@@ -21,7 +21,6 @@ public class ModuleExportsListener extends CodeExecutionListener {
 
     @Override
     public void onAfterExecute(final ListenerCodeExecutor.PostExecutionContext postExecutionContext) {
-        System.out.println(moduleBinding);
         postExecutionContext.getContext().getBindings(JAVASCRIPT).removeMember("module");
     }
 
