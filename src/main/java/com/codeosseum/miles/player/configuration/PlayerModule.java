@@ -1,13 +1,34 @@
 package com.codeosseum.miles.player.configuration;
 
-import com.codeosseum.miles.player.DefaultPlayerRegistryImpl;
-import com.codeosseum.miles.player.PlayerRegistry;
+import java.util.List;
+
+import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.player.DefaultPresentPlayerRegistryImpl;
+import com.codeosseum.miles.player.DefaultRegisteredPlayerRegistryImpl;
+import com.codeosseum.miles.player.PresentPlayerRegistry;
+import com.codeosseum.miles.player.RegisteredPlayerRegistry;
+import com.codeosseum.miles.player.event.PlayerJoinedListener;
+import com.codeosseum.miles.player.event.PlayerLeftEvent;
+import com.codeosseum.miles.player.event.PlayerLeftListener;
 import com.codeosseum.miles.util.inject.MilesModule;
 import com.google.inject.Singleton;
 
+import static java.util.Arrays.asList;
+
 public class PlayerModule extends MilesModule {
     @Override
+    protected List<Class<?>> requires() {
+        return asList(EventDispatcher.class);
+    }
+
+    @Override
     protected void configureModule() {
-        bind(PlayerRegistry.class).to(DefaultPlayerRegistryImpl.class).in(Singleton.class);
+        bindSingleton(RegisteredPlayerRegistry.class, DefaultRegisteredPlayerRegistryImpl.class);
+
+        bindSingleton(PresentPlayerRegistry.class, DefaultPresentPlayerRegistryImpl.class);
+
+        bindEagerSingleton(PlayerJoinedListener.class);
+
+        bindEagerSingleton(PlayerLeftListener.class);
     }
 }

@@ -2,7 +2,7 @@ package com.codeosseum.miles.player;
 
 import java.util.List;
 
-public interface PlayerRegistry {
+public interface PresentPlayerRegistry {
     boolean hasPlayer(String id);
 
     List<String> getAllPlayers();

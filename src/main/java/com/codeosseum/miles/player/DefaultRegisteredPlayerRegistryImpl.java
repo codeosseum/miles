@@ -8,11 +8,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.Objects.requireNonNull;
 
-public class DefaultPlayerRegistryImpl implements PlayerRegistry {
+public class DefaultRegisteredPlayerRegistryImpl implements RegisteredPlayerRegistry {
     private final List<String> players;
 
     @Inject
-    public DefaultPlayerRegistryImpl() {
+    public DefaultRegisteredPlayerRegistryImpl() {
         players = new CopyOnWriteArrayList<>();
     }
 

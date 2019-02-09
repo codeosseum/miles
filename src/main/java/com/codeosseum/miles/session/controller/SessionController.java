@@ -4,7 +4,10 @@ import com.codeosseum.miles.communication.websocket.controller.JsonWebSocketCont
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
-import com.codeosseum.miles.player.PlayerRegistry;
+import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.player.RegisteredPlayerRegistry;
+import com.codeosseum.miles.player.event.PlayerJoinedEvent;
+import com.codeosseum.miles.player.event.PlayerLeftEvent;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.eclipse.jetty.websocket.api.Session;
@@ -16,14 +19,18 @@ public class SessionController extends JsonWebSocketController {
 
     private final SessionRegistry sessionRegistry;
 
-    private final PlayerRegistry playerRegistry;
+    private final RegisteredPlayerRegistry registeredPlayerRegistry;
+
+    private final EventDispatcher eventDispatcher;
 
     @Inject
-    public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry, final PlayerRegistry playerRegistry) {
+    public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry,
+                             final RegisteredPlayerRegistry registeredPlayerRegistry, final EventDispatcher eventDispatcher) {
         super(gson, messageTransmitter);
 
         this.sessionRegistry = sessionRegistry;
-        this.playerRegistry = playerRegistry;
+        this.registeredPlayerRegistry = registeredPlayerRegistry;
+        this.eventDispatcher = eventDispatcher;
     }
 
     @Override
@@ -44,18 +51,28 @@ public class SessionController extends JsonWebSocketController {
     }
 
     private void onHello(final Session session, final HelloMessage payload) {
+        final String username = payload.getUsername();
+
+        LOGGER.info("User {} trying to authenticate", username);
+
         final boolean canAuthenticate =
                 sessionNotAuthenticated(session)
-                && userNotAuthenticated(payload.getUsername())
-                && userIsParticipantOfTheMatch(payload.getUsername());
+                && userNotAuthenticated(username)
+                && userIsParticipantOfTheMatch(username);
 
         if (canAuthenticate) {
-            sessionRegistry.addAuthenticatedSession(session, payload.getUsername());
+            sessionRegistry.addAuthenticatedSession(session, username);
+
+            eventDispatcher.dispatchEvent(new PlayerJoinedEvent(username));
         }
     }
 
     private void onConnectionClose(final Session session, final int statusCode, final String reason) {
         LOGGER.info("WS connection closed at {} with statusCode {} and reason {}", session.getRemoteAddress(), statusCode, reason);
+
+        sessionRegistry.getIdForSession(session)
+                .map(PlayerLeftEvent::new)
+                .ifPresent(eventDispatcher::dispatchEvent);
 
         sessionRegistry.removeActiveSession(session);
     }
@@ -69,6 +86,6 @@ public class SessionController extends JsonWebSocketController {
     }
 
     private boolean userIsParticipantOfTheMatch(final String username) {
-        return playerRegistry.hasPlayer(username);
+        return registeredPlayerRegistry.hasPlayer(username);
     }
 }
