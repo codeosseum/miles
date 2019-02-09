@@ -1,5 +1,6 @@
 package com.codeosseum.miles.faultseeding.configuration;
 
+import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigurationHolderImpl;
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
@@ -19,7 +20,7 @@ import static java.util.Arrays.asList;
 public class FaultSeedingModule extends MilesModule {
     @Override
     protected List<Class<?>> requires() {
-        return asList(Gson.class, MatchStatus.class);
+        return asList(Gson.class, MatchStatus.class, EventDispatcher.class);
     }
 
     @Override
