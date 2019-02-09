@@ -12,6 +12,7 @@ import com.codeosseum.miles.communication.http.HttpBootstrapper;
 import com.codeosseum.miles.communication.http.configuration.HttpModule;
 import com.codeosseum.miles.communication.websocket.WebSocketBootstrapper;
 import com.codeosseum.miles.communication.websocket.configuration.WebSocketModule;
+import com.codeosseum.miles.match.configuration.MatchModule;
 import com.codeosseum.miles.player.configuration.PlayerModule;
 import com.codeosseum.miles.registration.configuration.RegistrationModule;
 import com.codeosseum.miles.session.configuration.SessionModule;
@@ -55,7 +56,8 @@ public final class Application {
                 new PlayerModule(),
                 new ChallengeModule(),
                 new FaultSeedingModule(),
-                new UtilModule());
+                new UtilModule(),
+                new MatchModule());
     }
 
     @Singleton
