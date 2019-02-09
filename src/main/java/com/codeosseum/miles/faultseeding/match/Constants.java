@@ -6,7 +6,7 @@ public final class Constants {
     public final class Stage {
         public static final String WAITING_FOR_PLAYERS = "waiting-for-players";
 
-        public static final String MATCH_STARTING = "match-starting";
+        public static final String MATCH_COMMENCING = "match-commencing";
 
         public static final String IN_PROGRESS = "in-progress";
 

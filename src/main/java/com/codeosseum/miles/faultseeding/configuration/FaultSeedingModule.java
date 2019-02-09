@@ -6,6 +6,7 @@ import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigu
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
 import com.codeosseum.miles.faultseeding.match.registration.MatchRegistrationController;
+import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignalListener;
 import com.codeosseum.miles.faultseeding.submission.configuration.SubmissionModule;
 import com.codeosseum.miles.faultseeding.task.configuration.TaskModule;
 import com.codeosseum.miles.match.MatchStatus;
@@ -38,5 +39,7 @@ public class FaultSeedingModule extends MilesModule {
         bindSingleton(MatchConfigurationHolder.class, DefaultMatchConfigurationHolderImpl.class);
 
         bindEagerSingleton(MatchIgniter.class);
+
+        bindEagerSingleton(MatchCommencingSignalListener.class);
     }
 }

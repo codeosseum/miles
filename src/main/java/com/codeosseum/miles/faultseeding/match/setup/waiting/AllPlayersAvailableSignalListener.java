@@ -1,8 +1,9 @@
-package com.codeosseum.miles.faultseeding.match.setup;
+package com.codeosseum.miles.faultseeding.match.setup.waiting;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
 import com.codeosseum.miles.faultseeding.match.Constants;
+import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignal;
 import com.codeosseum.miles.match.MatchStatus;
 import com.codeosseum.miles.player.event.AllPlayersAvailableSignal;
 import com.google.inject.Inject;
@@ -23,9 +24,9 @@ public class AllPlayersAvailableSignalListener implements SignalConsumer {
     @Override
     public void accept() {
         if (currentMatchIsFaultSeeding() && waitingForPlayers()) {
-            matchStatus.setCurrentStage(Constants.Stage.MATCH_STARTING);
+            matchStatus.setCurrentStage(Constants.Stage.MATCH_COMMENCING);
 
-            eventDispatcher.dispatchEvent(new MatchStartingSignal());
+            eventDispatcher.dispatchEvent(new MatchCommencingSignal());
         }
     }
 
