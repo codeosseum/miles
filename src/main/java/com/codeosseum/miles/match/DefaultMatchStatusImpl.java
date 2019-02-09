@@ -3,9 +3,14 @@ package com.codeosseum.miles.match;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DefaultMatchStatusImpl implements MatchStatus {
-    private AtomicReference<String> currentStage;
+    private final AtomicReference<String> currentStage;
 
-    private AtomicReference<String> currentMode;
+    private final AtomicReference<String> currentMode;
+
+    public DefaultMatchStatusImpl() {
+        this.currentStage = new AtomicReference<>(UNSET_STAGE);
+        this.currentMode = new AtomicReference<>(UNSET_MODE);
+    }
 
     @Override
     public String getCurrentStage() {

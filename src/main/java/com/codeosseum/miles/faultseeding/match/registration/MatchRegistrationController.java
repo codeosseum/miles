@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
-import static com.codeosseum.miles.match.MatchStatus.NO_MATCH;
+import static com.codeosseum.miles.match.MatchStatus.UNSET_MODE;
 import static org.eclipse.jetty.http.HttpStatus.Code.CONFLICT;
 import static org.eclipse.jetty.http.HttpStatus.Code.NO_CONTENT;
 import static spark.Spark.put;
@@ -45,7 +45,7 @@ public class MatchRegistrationController extends JsonHttpController {
     }
 
     private Object registerNewMatch(final Request request, final Response response) {
-        if (matchStatus.equals(NO_MATCH)) {
+        if (matchStatus.getCurrentMode().equals(UNSET_MODE)) {
             response.status(NO_CONTENT.getCode());
 
             dispatchMatch(gson.fromJson(request.body(), MatchConfiguration.class));
