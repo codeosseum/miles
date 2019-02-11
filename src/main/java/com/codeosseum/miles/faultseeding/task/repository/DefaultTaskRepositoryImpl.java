@@ -15,12 +15,14 @@ import com.codeosseum.miles.faultseeding.challenge.stored.Challenge;
 import com.codeosseum.miles.faultseeding.challenge.stored.Solution;
 import com.codeosseum.miles.faultseeding.challenge.stored.StoredChallengeRepository;
 import com.codeosseum.miles.faultseeding.task.Task;
+import com.codeosseum.miles.util.math.Span;
 import com.google.inject.Inject;
 import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 public class DefaultTaskRepositoryImpl implements TaskRepository {
@@ -40,10 +42,10 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Optional<Task> getTaskWithDifficulty(final int minDifficulty, final int maxDifficulty) {
-        LOGGER.info("Searching for a random task in difficulty range: {} - {}", minDifficulty, maxDifficulty);
+    public Optional<Task> getTaskWithDifficulty(final Span difficultySpan) {
+        LOGGER.info("Searching for a random task in difficulty range: {}", difficultySpan);
 
-        return findDifficultySpan(minDifficulty, maxDifficulty)
+        return findDifficultySpan(requireNonNull(difficultySpan))
                 .flatMap(this::randomTaskInSpan);
     }
 
@@ -59,9 +61,9 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
         taskSeeds.addAll(newSeeds);
     }
 
-    private Optional<Span> findDifficultySpan(final int minDifficulty, final int maxDifficulty) {
-        final Optional<Integer> minIndexOptional = findFirstWithDifficultyAtLeast(minDifficulty);
-        final Optional<Integer> maxIndexOptional = findFirstWithDifficultyAtMost(maxDifficulty);
+    private Optional<Span> findDifficultySpan(final Span span) {
+        final Optional<Integer> minIndexOptional = findFirstWithDifficultyAtLeast(span.getLower());
+        final Optional<Integer> maxIndexOptional = findFirstWithDifficultyAtMost(span.getUpper());
 
         if (minIndexOptional.isPresent() && maxIndexOptional.isPresent()) {
             final int min = minIndexOptional.get();
@@ -82,7 +84,7 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
     }
 
     private Optional<Task> randomTaskInSpan(final Span difficultySpan) {
-        final TaskSeed seed = randomTaskSeedBetween(difficultySpan.lower, difficultySpan.uppter);
+        final TaskSeed seed = randomTaskSeedBetween(difficultySpan.getLower(), difficultySpan.getUpper());
 
         try {
             return Optional.of(taskFromSeed(seed));
@@ -161,13 +163,6 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
         final byte[] rawContents = Files.readAllBytes(Paths.get(path));
 
         return new String(rawContents, Charset.defaultCharset());
-    }
-
-    @Value
-    private static final class Span {
-        private final int lower;
-
-        private final int uppter;
     }
 
     @Value
