@@ -13,11 +13,11 @@ import spark.Response;
 
 import static com.codeosseum.miles.match.MatchStatus.UNSET_MODE;
 import static org.eclipse.jetty.http.HttpStatus.Code.CONFLICT;
-import static org.eclipse.jetty.http.HttpStatus.Code.NO_CONTENT;
+import static org.eclipse.jetty.http.HttpStatus.Code.CREATED;
 import static spark.Spark.put;
 
 public class MatchRegistrationController extends JsonHttpController {
-    private static final Object EMPTY_RESPONSE = null;
+    private static final String EMPTY_RESPONSE = "";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchRegistrationController.class);
 
@@ -46,7 +46,7 @@ public class MatchRegistrationController extends JsonHttpController {
 
     private Object registerNewMatch(final Request request, final Response response) {
         if (matchStatus.getCurrentMode().equals(UNSET_MODE)) {
-            response.status(NO_CONTENT.getCode());
+            response.status(CREATED.getCode());
 
             dispatchMatch(gson.fromJson(request.body(), MatchConfiguration.class));
 

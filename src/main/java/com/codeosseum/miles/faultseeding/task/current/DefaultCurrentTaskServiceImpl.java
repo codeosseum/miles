@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.codeosseum.miles.faultseeding.task.Task;
 import com.codeosseum.miles.faultseeding.task.repository.TaskRepository;
 import com.codeosseum.miles.util.math.Span;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class DefaultCurrentTaskServiceImpl implements CurrentTaskService {
 
     private AtomicReference<Task> currentTask;
 
+    @Inject
     public DefaultCurrentTaskServiceImpl(final TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
 

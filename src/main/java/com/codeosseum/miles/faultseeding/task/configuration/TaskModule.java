@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.stored.StoredChallengeRepository;
+import com.codeosseum.miles.faultseeding.task.current.CurrentTaskService;
+import com.codeosseum.miles.faultseeding.task.current.DefaultCurrentTaskServiceImpl;
+import com.codeosseum.miles.faultseeding.task.publish.DefaultTaskPublisherImpl;
+import com.codeosseum.miles.faultseeding.task.publish.TaskPublisher;
+import com.codeosseum.miles.faultseeding.task.publish.TaskPublisherListener;
 import com.codeosseum.miles.faultseeding.task.repository.ChallengesLoadedListener;
 import com.codeosseum.miles.faultseeding.task.repository.DefaultTaskRepositoryImpl;
 import com.codeosseum.miles.faultseeding.task.repository.TaskRepository;
@@ -21,6 +26,12 @@ public class TaskModule extends MilesModule {
     protected void configureModule() {
         bindEagerSingleton(ChallengesLoadedListener.class);
 
+        bindEagerSingleton(TaskPublisherListener.class);
+
         bindSingleton(TaskRepository.class, DefaultTaskRepositoryImpl.class);
+
+        bindSingleton(CurrentTaskService.class, DefaultCurrentTaskServiceImpl.class);
+
+        bindSingleton(TaskPublisher.class, DefaultTaskPublisherImpl.class);
     }
 }

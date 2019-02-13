@@ -4,6 +4,7 @@ import com.codeosseum.miles.communication.Message;
 import com.codeosseum.miles.communication.push.PushMessageToClientService;
 import com.codeosseum.miles.faultseeding.task.Task;
 import com.codeosseum.miles.player.PresentPlayerRegistry;
+import com.google.inject.Inject;
 
 import static com.codeosseum.miles.communication.Message.message;
 
@@ -16,6 +17,7 @@ public class DefaultTaskPublisherImpl implements TaskPublisher {
 
     private final PushMessageToClientService messageService;
 
+    @Inject
     public DefaultTaskPublisherImpl(final PresentPlayerRegistry presentPlayerRegistry, final PushMessageToClientService messageService) {
         this.presentPlayerRegistry = presentPlayerRegistry;
         this.messageService = messageService;
