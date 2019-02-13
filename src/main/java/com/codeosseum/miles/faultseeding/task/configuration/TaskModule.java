@@ -5,6 +5,7 @@ import java.util.List;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.stored.StoredChallengeRepository;
 import com.codeosseum.miles.faultseeding.task.current.CurrentTaskService;
+import com.codeosseum.miles.faultseeding.task.current.CurrentTaskStepperListener;
 import com.codeosseum.miles.faultseeding.task.current.DefaultCurrentTaskServiceImpl;
 import com.codeosseum.miles.faultseeding.task.publish.DefaultTaskPublisherImpl;
 import com.codeosseum.miles.faultseeding.task.publish.TaskPublisher;
@@ -25,6 +26,8 @@ public class TaskModule extends MilesModule {
     @Override
     protected void configureModule() {
         bindEagerSingleton(ChallengesLoadedListener.class);
+
+        bindEagerSingleton(CurrentTaskStepperListener.class);
 
         bindEagerSingleton(TaskPublisherListener.class);
 
