@@ -34,6 +34,7 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
 
         <!-- DEPENDENCY VERSIONS -->
+        <slf4j-api.version>1.7.25</slf4j-api.version>
         <lombok.version>1.18.4</lombok.version>
         <spark-core.version>2.8.0</spark-core.version>
         <guice.version>4.2.2</guice.version>
@@ -53,6 +54,12 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
