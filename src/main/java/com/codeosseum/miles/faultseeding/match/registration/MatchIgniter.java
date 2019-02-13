@@ -37,7 +37,5 @@ public class MatchIgniter implements EventConsumer<FaultSeedingMatchRegisteredEv
         matchConfigurationHolder.set(event.getMatchConfiguration());
 
         event.getMatchConfiguration().getPlayers().forEach(registeredPlayerRegistry::addPlayer);
-
-        eventDispatcher.dispatchEvent(new MatchCommencingSignal());
     }
 }
