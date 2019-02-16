@@ -22,6 +22,6 @@ public class CurrentTaskStepperListener implements SignalConsumer {
     public void accept() {
         currentTaskService.stepCurrentTask();
 
-        eventDispatcher.dispatchEvent(new NewTaskSetSignal());
+        eventDispatcher.dispatchEvent(new NewTaskSetEvent(currentTaskService.getCurrentTask()));
     }
 }
