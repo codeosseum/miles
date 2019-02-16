@@ -109,8 +109,7 @@ public class DefaultTaskRepositoryImpl implements TaskRepository {
         final String solution = readFileContents(seed.getSolution().getEntrypointPath());
 
         return Task.builder()
-                .challengeId(seed.getChallenge().getId())
-                .solutionId(seed.getSolution().getId())
+                .id(seed.getSolution().getId())
                 .difficulty(seed.getDifficulty())
                 .title(seed.getChallenge().getTitle())
                 .description(description)

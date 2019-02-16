@@ -13,12 +13,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codeosseum.miles.faultseeding.challenge.stored.Solution.ID_SEPARATOR;
 import static java.util.Objects.requireNonNull;
 
 class SolutionLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(SolutionLoader.class);
 
-    private static final String ID_SEPARATOR = ":";
     private static final String MANIFEST_FILENAME = "manifest.json";
     private static final String ENTRYPOINT_FILENAME = "index.js";
 
