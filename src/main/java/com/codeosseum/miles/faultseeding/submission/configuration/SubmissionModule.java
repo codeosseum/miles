@@ -6,6 +6,7 @@ import com.codeosseum.miles.code.execution.listener.ListenerCodeExecutorFactory;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.faultseeding.submission.controller.SubmissionController;
 import com.codeosseum.miles.faultseeding.submission.evaluation.DefaultSubmissionEvaluatorFactoryImpl;
+import com.codeosseum.miles.faultseeding.submission.evaluation.SubmissionEvaluationService;
 import com.codeosseum.miles.faultseeding.submission.evaluation.SubmissionEvaluatorFactory;
 import com.codeosseum.miles.util.inject.MilesModule;
 import com.google.gson.Gson;
@@ -30,6 +31,8 @@ public class SubmissionModule extends MilesModule {
         bind(ListenerCodeExecutorFactory.class)
                 .annotatedWith(Names.named(FACTORY_IDENTIFIER))
                 .toInstance(new ListenerCodeExecutionFactoryProvider().get());
+
+        bindEagerSingleton(SubmissionEvaluationService.class);
     }
 
 
