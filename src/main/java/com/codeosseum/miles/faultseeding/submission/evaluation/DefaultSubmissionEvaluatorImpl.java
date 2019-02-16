@@ -64,6 +64,9 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
         final Object erroneousOutput = computeErroneousOutput(testFunction);
         final Object perfectOutput = computePerfectOutput(testFunction);
 
+        LOGGER.debug("Erroneous output is {}", erroneousOutput);
+        LOGGER.debug("Perfect output is {}", perfectOutput);
+
         final EvaluationResult.Status status = compareOutputs(erroneousOutput, perfectOutput);
 
         return EvaluationResult.evaluatedSubmission(status,
