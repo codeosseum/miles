@@ -30,6 +30,8 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
 
     private final Source evaluatorSource;
 
+    private final Task task;
+
     private Value erroneousSolution;
 
     private Value perfectSolution;
@@ -39,6 +41,7 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
         this.executor = executor;
         this.outputComparator = outputComparator;
         this.outputConverter = outputConverter;
+        this.task = task;
 
         this.solutionSource = Source.create(JAVASCRIPT, task.getSolutionEntrypoint());
         this.evaluatorSource = Source.create(JAVASCRIPT, task.getEvaluatorEntrypoint());
@@ -66,6 +69,11 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
         return EvaluationResult.evaluatedSubmission(status,
                 outputConverter.convertToString(erroneousOutput),
                 outputConverter.convertToString(perfectOutput));
+    }
+
+    @Override
+    public Task getEvaluatedTask() {
+        return this.task;
     }
 
     private void prepareEvaluation() throws EvaluationException {
