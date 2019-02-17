@@ -8,7 +8,7 @@ import com.codeosseum.miles.faultseeding.submission.Submission;
 import com.codeosseum.miles.faultseeding.submission.SubmissionEvaluatedEvent;
 import com.codeosseum.miles.faultseeding.submission.SubmissionReceivedEvent;
 import com.codeosseum.miles.faultseeding.submission.SubmissionResult;
-import com.codeosseum.miles.faultseeding.task.current.NewTaskSetEvent;
+import com.codeosseum.miles.faultseeding.task.current.CurrentTaskSetEvent;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;
 import com.google.inject.Inject;
 
@@ -34,12 +34,12 @@ public class SubmissionEvaluationService {
 
         this.evaluatorMap = new ConcurrentHashMap<>();
 
-        eventDispatcher.registerConsumer(NewTaskSetEvent.class, this::onNewTaskSet);
+        eventDispatcher.registerConsumer(CurrentTaskSetEvent.class, this::onCurrentTaskSet);
 
         eventDispatcher.registerConsumer(SubmissionReceivedEvent.class, this::onSubmissionReceived);
     }
 
-    void onNewTaskSet(final NewTaskSetEvent event) {
+    void onCurrentTaskSet(final CurrentTaskSetEvent event) {
         evaluatorMap.clear();
 
         playerRegistry.getAllPlayers()
