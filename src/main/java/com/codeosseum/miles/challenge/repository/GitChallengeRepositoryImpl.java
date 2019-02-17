@@ -59,7 +59,7 @@ public class GitChallengeRepositoryImpl implements ChallengeRepository {
 
     void loadChallenges() throws CouldNotLoadChallengesException {
         try {
-            cloneRepository();
+            //cloneRepository();
 
             this.translationMap = loadTranslations();
 

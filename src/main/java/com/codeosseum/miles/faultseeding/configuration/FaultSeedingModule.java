@@ -4,12 +4,15 @@ import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigurationHolderImpl;
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
+import com.codeosseum.miles.faultseeding.match.flow.MatchFlowListener;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
 import com.codeosseum.miles.faultseeding.match.registration.MatchRegistrationController;
 import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignalListener;
 import com.codeosseum.miles.faultseeding.match.setup.starting.MatchStartingPublisherListener;
 import com.codeosseum.miles.faultseeding.match.setup.waiting.AllPlayersAvailableSignalListener;
 import com.codeosseum.miles.faultseeding.match.setup.waiting.PlayerJoinedListener;
+import com.codeosseum.miles.faultseeding.scoring.DefaultScoringServiceImpl;
+import com.codeosseum.miles.faultseeding.scoring.ScoringService;
 import com.codeosseum.miles.faultseeding.submission.configuration.SubmissionModule;
 import com.codeosseum.miles.faultseeding.task.configuration.TaskModule;
 import com.codeosseum.miles.match.MatchStatus;
@@ -50,5 +53,9 @@ public class FaultSeedingModule extends MilesModule {
         bindEagerSingleton(AllPlayersAvailableSignalListener.class);
 
         bindEagerSingleton(PlayerJoinedListener.class);
+
+        bindEagerSingleton(ScoringService.class, DefaultScoringServiceImpl.class);
+
+        bindEagerSingleton(MatchFlowListener.class);
     }
 }
