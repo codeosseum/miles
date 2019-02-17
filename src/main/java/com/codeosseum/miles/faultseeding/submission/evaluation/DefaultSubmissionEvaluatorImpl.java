@@ -7,6 +7,7 @@ import com.codeosseum.miles.code.execution.listener.listeners.TimeoutListener;
 import com.codeosseum.miles.code.output.comparator.OutputComparator;
 import com.codeosseum.miles.code.output.converter.OutputConverter;
 import com.codeosseum.miles.faultseeding.task.Task;
+import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
@@ -56,8 +57,16 @@ public class DefaultSubmissionEvaluatorImpl implements SubmissionEvaluator {
         final Value testFunction;
         try {
             testFunction = getExportedValue(Source.create(JAVASCRIPT, submission));
-        } catch (final Exception e) {
-            return EvaluationResult.submissionError(outputConverter.convertToString(e));
+        } catch (final CodeExecutionException e) {
+            final Throwable cause;
+
+            if (e.getCause() instanceof PolyglotException) {
+                cause = e.getCause();
+            } else {
+                cause = e;
+            }
+
+            return EvaluationResult.submissionError(outputConverter.convertToString(cause));
         }
 
         // TODO: Investigate (and if necessary implement) Promise support.
