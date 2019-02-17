@@ -15,6 +15,10 @@ public class SubmissionResult {
 
     private final Exception evaluationException;
 
+    public static SubmissionResult invalidTask(final Submission submission) {
+        return new SubmissionResult(Status.INVALID_TASK, submission, null, null);
+    }
+
     public static SubmissionResult evaluationError(final Submission submission, final Exception evaluationException) {
         return new SubmissionResult(Status.EVALUATION_ERROR, submission, null, requireNonNull(evaluationException));
     }
@@ -31,6 +35,7 @@ public class SubmissionResult {
     }
 
     public enum Status {
+        INVALID_TASK,
         EVALUATION_ERROR,
         SUCCESSFUL_EVALUATION
     }

@@ -46,7 +46,9 @@ public class MatchFlowListener {
     void onSubmissionReceived(final SubmissionEvaluatedEvent event) {
         final SubmissionResult result = event.getSubmissionResult();
 
-        if (isEvaluationError(result)) {
+        if (isInvalidTask(result)) {
+            sendInvalidTaskMessage(result.getSubmission());
+        } else if (isEvaluationError(result)) {
             sendEvaluationErrorMessage(result.getSubmission());
         } else if (isErroneousSubmission(result)) {
             sendErroneousSubmissionMessage(result.getSubmission(), result.getEvaluationResult().getSubmissionError());
@@ -63,6 +65,18 @@ public class MatchFlowListener {
         stepCurrentTask();
 
         sendMatchStartingStep();
+    }
+
+    private boolean isInvalidTask(final SubmissionResult result) {
+        return result.getStatus().equals(SubmissionResult.Status.INVALID_TASK);
+    }
+
+    private void sendInvalidTaskMessage(final Submission submission) {
+        final InvalidTaskPayload payload = new InvalidTaskPayload(submission.getId(), submission.getTaskId());
+
+        final Message<InvalidTaskPayload> message = Message.message(InvalidTaskPayload.ACTION, payload);
+
+        messagingService.sendMessage(submission.getUserId(), message);
     }
 
     private boolean isEvaluationError(final SubmissionResult result) {
@@ -138,6 +152,15 @@ public class MatchFlowListener {
     private <T> void broadcastMessage(final Message<T> message) {
         playerRegistry.getAllPlayers()
                 .forEach(username -> messagingService.sendMessage(username, message));
+    }
+
+    @Value
+    private static final class InvalidTaskPayload {
+        private static final String ACTION = "fault-seeding-invalid-task";
+
+        private final String submissionId;
+
+        private final String taskId;
     }
 
     @Value

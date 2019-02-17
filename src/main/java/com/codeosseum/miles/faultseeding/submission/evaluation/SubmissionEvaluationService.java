@@ -13,6 +13,7 @@ import com.codeosseum.miles.player.RegisteredPlayerRegistry;
 import com.google.inject.Inject;
 
 import static com.codeosseum.miles.faultseeding.submission.SubmissionResult.evaluationError;
+import static com.codeosseum.miles.faultseeding.submission.SubmissionResult.invalidTask;
 import static com.codeosseum.miles.faultseeding.submission.SubmissionResult.successfulEvaluation;
 
 public class SubmissionEvaluationService {
@@ -55,13 +56,18 @@ public class SubmissionEvaluationService {
 
         final SubmissionEvaluator evaluator = evaluatorMap.get(submission.getUserId());
 
-        if (/* Task IDs do not match*/ false) {
-
+        final SubmissionResult result;
+        if (submissionForAnotherTask(submission, evaluator)) {
+            result = invalidTask(submission);
+        } else {
+            result = evaluateSubmission(evaluator, submission);
         }
 
-        final SubmissionResult result = evaluateSubmission(evaluator, submission);
-
         eventDispatcher.dispatchEvent(new SubmissionEvaluatedEvent(result));
+    }
+
+    private boolean submissionForAnotherTask(final Submission submission, final SubmissionEvaluator evaluator) {
+        return !evaluator.getEvaluatedTask().getId().equals(submission.getTaskId());
     }
 
     private SubmissionResult evaluateSubmission(final SubmissionEvaluator evaluator, final Submission submission) {
