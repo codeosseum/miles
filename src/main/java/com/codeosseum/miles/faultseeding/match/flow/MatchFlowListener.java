@@ -39,11 +39,11 @@ public class MatchFlowListener {
         this.playerRegistry = playerRegistry;
         this.eventDispatcher = eventDispatcher;
 
-        eventDispatcher.registerConsumer(SubmissionEvaluatedEvent.class, this::onSubmissionReceived);
+        eventDispatcher.registerConsumer(SubmissionEvaluatedEvent.class, this::onSubmissionEvaluated);
         eventDispatcher.registerConsumer(MatchStartingSignal.class, this::onMatchStarting);
     }
 
-    void onSubmissionReceived(final SubmissionEvaluatedEvent event) {
+    void onSubmissionEvaluated(final SubmissionEvaluatedEvent event) {
         final SubmissionResult result = event.getSubmissionResult();
 
         if (isInvalidTask(result)) {
@@ -55,9 +55,7 @@ public class MatchFlowListener {
         } else if (noBugFound(result)) {
             sendIncorrectSubmissionMessage(result.getSubmission(), result.getEvaluationResult().getActualOutput());
         } else {
-            stepCurrentTask();
-
-            sendIngameStep(result);
+            tryStepFlow(result);
         }
     }
 
@@ -113,6 +111,18 @@ public class MatchFlowListener {
         final Message<IncorrectSubmissionPayload> incorrectSubmissionMessage = Message.message(IncorrectSubmissionPayload.ACTION, payload);
 
         messagingService.sendMessage(submission.getUserId(), incorrectSubmissionMessage);
+    }
+
+    private void tryStepFlow(final SubmissionResult result) {
+        try {
+            stepCurrentTask();
+
+            scoringService.scoreSubmission(result);
+
+            sendIngameStep(result);
+        } catch(final Exception e) {
+            sendInvalidTaskMessage(result.getSubmission());
+        }
     }
 
     private void stepCurrentTask() {
