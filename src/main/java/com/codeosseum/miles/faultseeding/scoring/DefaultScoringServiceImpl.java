@@ -1,5 +1,7 @@
 package com.codeosseum.miles.faultseeding.scoring;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,9 +41,10 @@ public class DefaultScoringServiceImpl implements ScoringService {
 
     @Override
     public List<Position> getRanking() {
-        return scoreMap.entrySet().stream()
-                .map(entry -> new Position(entry.getKey(), entry.getValue()))
-                .sorted(comparing(Position::getScore))
+        return scoreMap.values().stream()
+                .distinct()
+                .map(this::createPositionByScore)
+                .sorted(Comparator.comparing(Position::getScore))
                 .collect(toList());
     }
 
@@ -59,6 +62,21 @@ public class DefaultScoringServiceImpl implements ScoringService {
         playerRegistry.getAllPlayers()
                 .forEach(username -> scoreMap.put(username, 0));
     }
+
+
+    private Position createPositionByScore(final Integer score) {
+        // Pretty ugly, but good for a small amout of players.
+        final List<String> players = new ArrayList<>();
+
+        for (final Map.Entry<String, Integer> entry : scoreMap.entrySet()) {
+            if (entry.getValue().equals(score)) {
+                players.add(entry.getKey());
+            }
+        }
+
+        return new Position(players, score);
+    }
+
 
     private boolean isFaultFound(final SubmissionResult submissionResult) {
         return isEvaluationSuccessful(submissionResult) && isDifferentOutputs(submissionResult);
