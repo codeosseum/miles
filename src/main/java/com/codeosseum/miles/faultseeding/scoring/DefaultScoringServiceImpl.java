@@ -1,21 +1,19 @@
 package com.codeosseum.miles.faultseeding.scoring;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignal;
-import com.codeosseum.miles.faultseeding.submission.SubmissionEvaluatedEvent;
 import com.codeosseum.miles.faultseeding.submission.SubmissionResult;
 import com.codeosseum.miles.faultseeding.submission.evaluation.EvaluationResult;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;
 import com.google.inject.Inject;
 
 import static java.util.Collections.unmodifiableMap;
-import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
 public class DefaultScoringServiceImpl implements ScoringService {
@@ -44,7 +42,7 @@ public class DefaultScoringServiceImpl implements ScoringService {
         return scoreMap.values().stream()
                 .distinct()
                 .map(this::createPositionByScore)
-                .sorted(Comparator.comparing(Position::getScore))
+                .sorted(comparingInt(Position::getScore).reversed())
                 .collect(toList());
     }
 
