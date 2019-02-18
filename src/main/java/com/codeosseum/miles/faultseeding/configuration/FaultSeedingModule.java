@@ -6,6 +6,7 @@ import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigu
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
 import com.codeosseum.miles.faultseeding.match.flow.MatchFlowListener;
 import com.codeosseum.miles.faultseeding.match.over.DefaultMatchTimerImpl;
+import com.codeosseum.miles.faultseeding.match.over.FinalScoreSendingListener;
 import com.codeosseum.miles.faultseeding.match.over.MatchTimer;
 import com.codeosseum.miles.faultseeding.match.over.MatchTimerListener;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
@@ -70,5 +71,7 @@ public class FaultSeedingModule extends MilesModule {
                 .toInstance(new Timer());
 
         bindSingleton(MatchTimer.class, DefaultMatchTimerImpl.class);
+
+        bindEagerSingleton(FinalScoreSendingListener.class);
     }
 }
