@@ -4,7 +4,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.faultseeding.match.Constants;
 import com.codeosseum.miles.faultseeding.match.setup.starting.MatchStartingSignal;
+import com.codeosseum.miles.match.MatchStatus;
 
 public class MatchStartingCountdown {
     // TODO: Read from configuration.
@@ -12,10 +14,13 @@ public class MatchStartingCountdown {
 
     private final EventDispatcher eventDispatcher;
 
+    private final MatchStatus matchStatus;
+
     private final Timer timer;
 
-    public MatchStartingCountdown(final EventDispatcher eventDispatcher, final Timer timer) {
+    public MatchStartingCountdown(final EventDispatcher eventDispatcher, final MatchStatus matchStatus, final Timer timer) {
         this.eventDispatcher = eventDispatcher;
+        this.matchStatus = matchStatus;
         this.timer = timer;
     }
 
@@ -23,6 +28,8 @@ public class MatchStartingCountdown {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                matchStatus.setCurrentStage(Constants.Stage.IN_PROGRESS);
+
                 eventDispatcher.dispatchEvent(new MatchStartingSignal());
             }
         }, COUNTDOWN_MILLISECONDS);
