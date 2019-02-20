@@ -32,6 +32,8 @@ public class DefaultSessionRegistryImpl implements SessionRegistry {
     @Override
     public void removeActiveSession(final Session session) {
         activeSessions.remove(session);
+
+        removeAuthenticatedSession(session);
     }
 
     @Override
