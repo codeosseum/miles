@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
-import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignal;
+import com.codeosseum.miles.faultseeding.match.flow.setup.commencing.MatchCommencingSignal;
 import com.codeosseum.miles.faultseeding.submission.SubmissionResult;
 import com.codeosseum.miles.faultseeding.submission.evaluation.EvaluationResult;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;

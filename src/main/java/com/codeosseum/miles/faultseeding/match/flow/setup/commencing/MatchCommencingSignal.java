@@ -1,4 +1,4 @@
-package com.codeosseum.miles.faultseeding.match.setup.commencing;
+package com.codeosseum.miles.faultseeding.match.flow.setup.commencing;
 
 import com.codeosseum.miles.eventbus.Signal;
 

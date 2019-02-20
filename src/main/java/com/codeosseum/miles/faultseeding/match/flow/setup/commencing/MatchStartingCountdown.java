@@ -1,11 +1,11 @@
-package com.codeosseum.miles.faultseeding.match.setup.commencing;
+package com.codeosseum.miles.faultseeding.match.flow.setup.commencing;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.match.Constants;
-import com.codeosseum.miles.faultseeding.match.setup.starting.MatchStartingSignal;
+import com.codeosseum.miles.faultseeding.match.flow.setup.starting.MatchStartingSignal;
 import com.codeosseum.miles.match.MatchStatus;
 
 public class MatchStartingCountdown {

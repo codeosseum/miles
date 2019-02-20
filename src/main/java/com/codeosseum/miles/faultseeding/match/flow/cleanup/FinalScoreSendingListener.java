@@ -1,4 +1,4 @@
-package com.codeosseum.miles.faultseeding.match.over;
+package com.codeosseum.miles.faultseeding.match.flow.cleanup;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class FinalScoreSendingListener implements SignalConsumer {
 
     @Value
     private static final class MatchOverPayload {
-        private static final String ACTION = "fault-seeding-match-over";
+        private static final String ACTION = "fault-seeding-match-cleanup";
 
         private static final String WIN = "win";
 

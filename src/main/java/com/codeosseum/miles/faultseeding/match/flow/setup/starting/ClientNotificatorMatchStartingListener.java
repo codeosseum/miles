@@ -1,4 +1,4 @@
-package com.codeosseum.miles.faultseeding.match.setup.starting;
+package com.codeosseum.miles.faultseeding.match.flow.setup.starting;
 
 import com.codeosseum.miles.communication.Message;
 import com.codeosseum.miles.communication.push.PushMessageToClientService;

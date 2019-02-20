@@ -1,9 +1,9 @@
-package com.codeosseum.miles.faultseeding.match.setup.waiting;
+package com.codeosseum.miles.faultseeding.match.flow.setup.waiting;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
 import com.codeosseum.miles.faultseeding.match.Constants;
-import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignal;
+import com.codeosseum.miles.faultseeding.match.flow.setup.commencing.MatchCommencingSignal;
 import com.codeosseum.miles.match.MatchStatus;
 import com.codeosseum.miles.player.event.AllPlayersAvailableSignal;
 import com.google.inject.Inject;

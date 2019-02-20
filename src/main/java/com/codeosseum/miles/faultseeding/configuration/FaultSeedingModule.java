@@ -4,17 +4,17 @@ import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigurationHolderImpl;
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
-import com.codeosseum.miles.faultseeding.match.flow.MatchFlowListener;
-import com.codeosseum.miles.faultseeding.match.over.DefaultMatchTimerImpl;
-import com.codeosseum.miles.faultseeding.match.over.FinalScoreSendingListener;
-import com.codeosseum.miles.faultseeding.match.over.MatchTimer;
-import com.codeosseum.miles.faultseeding.match.over.MatchTimerListener;
+import com.codeosseum.miles.faultseeding.match.flow.ingame.MatchIngameOrchestratorListener;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.DefaultMatchTimerImpl;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.FinalScoreSendingListener;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.MatchTimer;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.MatchTimerListener;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
 import com.codeosseum.miles.faultseeding.match.registration.MatchRegistrationController;
-import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignalListener;
-import com.codeosseum.miles.faultseeding.match.setup.starting.ClientNotificatorMatchStartingListener;
-import com.codeosseum.miles.faultseeding.match.setup.waiting.AllPlayersAvailableSignalListener;
-import com.codeosseum.miles.faultseeding.match.setup.waiting.PlayerJoinedListener;
+import com.codeosseum.miles.faultseeding.match.flow.setup.commencing.MatchCommencingSignalListener;
+import com.codeosseum.miles.faultseeding.match.flow.setup.starting.ClientNotificatorMatchStartingListener;
+import com.codeosseum.miles.faultseeding.match.flow.setup.waiting.AllPlayersAvailableSignalListener;
+import com.codeosseum.miles.faultseeding.match.flow.setup.waiting.PlayerJoinedListener;
 import com.codeosseum.miles.faultseeding.scoring.DefaultScoringServiceImpl;
 import com.codeosseum.miles.faultseeding.scoring.ScoringService;
 import com.codeosseum.miles.faultseeding.submission.configuration.SubmissionModule;
@@ -62,7 +62,7 @@ public class FaultSeedingModule extends MilesModule {
 
         bindEagerSingleton(ScoringService.class, DefaultScoringServiceImpl.class);
 
-        bindEagerSingleton(MatchFlowListener.class);
+        bindEagerSingleton(MatchIngameOrchestratorListener.class);
 
         bindEagerSingleton(MatchTimerListener.class);
 

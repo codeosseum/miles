@@ -1,11 +1,11 @@
-package com.codeosseum.miles.faultseeding.match.flow;
+package com.codeosseum.miles.faultseeding.match.flow.ingame;
 
 import java.util.Map;
 
 import com.codeosseum.miles.communication.Message;
 import com.codeosseum.miles.communication.push.PushMessageToClientService;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
-import com.codeosseum.miles.faultseeding.match.setup.starting.MatchStartingSignal;
+import com.codeosseum.miles.faultseeding.match.flow.setup.starting.MatchStartingSignal;
 import com.codeosseum.miles.faultseeding.scoring.ScoringService;
 import com.codeosseum.miles.faultseeding.submission.Submission;
 import com.codeosseum.miles.faultseeding.submission.SubmissionEvaluatedEvent;
@@ -18,7 +18,7 @@ import com.codeosseum.miles.player.PresentPlayerRegistry;
 import com.google.inject.Inject;
 import lombok.Value;
 
-public class MatchFlowListener {
+public class MatchIngameOrchestratorListener {
     private final ScoringService scoringService;
 
     private final CurrentTaskService currentTaskService;
@@ -30,9 +30,9 @@ public class MatchFlowListener {
     private final EventDispatcher eventDispatcher;
 
     @Inject
-    public MatchFlowListener(final ScoringService scoringService, final CurrentTaskService currentTaskService,
-                             final PushMessageToClientService messagingService, final PresentPlayerRegistry playerRegistry,
-                             final EventDispatcher eventDispatcher) {
+    public MatchIngameOrchestratorListener(final ScoringService scoringService, final CurrentTaskService currentTaskService,
+                                           final PushMessageToClientService messagingService, final PresentPlayerRegistry playerRegistry,
+                                           final EventDispatcher eventDispatcher) {
         this.scoringService = scoringService;
         this.currentTaskService = currentTaskService;
         this.messagingService = messagingService;

@@ -1,4 +1,4 @@
-package com.codeosseum.miles.faultseeding.match.setup.waiting;
+package com.codeosseum.miles.faultseeding.match.flow.setup.waiting;
 
 import com.codeosseum.miles.eventbus.dispatch.EventConsumer;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
