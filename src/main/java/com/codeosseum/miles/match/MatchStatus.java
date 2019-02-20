@@ -5,6 +5,8 @@ public interface MatchStatus {
 
     String UNSET_STAGE = "";
 
+    String UNSET_ID = "";
+
     String getCurrentStage();
 
     void setCurrentStage(String stage);
