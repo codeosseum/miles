@@ -13,6 +13,8 @@ import lombok.Value;
 public class ClientNotificatorFinalScoreSendingListener implements SignalConsumer {
     private final ScoringService scoringService;
 
+    private final EventDispatcher eventDispatcher;
+
     private final PresentPlayerRegistry playerRegistry;
 
     private final PushMessageToClientService messagingService;
@@ -21,6 +23,7 @@ public class ClientNotificatorFinalScoreSendingListener implements SignalConsume
     public ClientNotificatorFinalScoreSendingListener(final ScoringService scoringService, final PushMessageToClientService messagingService,
                                                       final EventDispatcher eventDispatcher, final PresentPlayerRegistry playerRegistry) {
         this.scoringService = scoringService;
+        this.eventDispatcher = eventDispatcher;
         this.messagingService = messagingService;
         this.playerRegistry = playerRegistry;
 
@@ -33,6 +36,8 @@ public class ClientNotificatorFinalScoreSendingListener implements SignalConsume
 
         playerRegistry.getAllPlayers()
                 .forEach(playerId -> messagingService.sendMessage(playerId, matchOverMessage));
+
+        eventDispatcher.dispatchEvent(new ScoreSentToClientsSignal());
     }
 
     private MatchOverPayload makeMatchOverPayload() {

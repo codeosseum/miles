@@ -4,6 +4,8 @@ import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigurationHolderImpl;
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.ClientCloseListener;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.MatchStatusCleanupListener;
 import com.codeosseum.miles.faultseeding.match.flow.ingame.MatchIngameOrchestratorListener;
 import com.codeosseum.miles.faultseeding.match.flow.ingame.timer.DefaultMatchTimerImpl;
 import com.codeosseum.miles.faultseeding.match.flow.cleanup.ClientNotificatorFinalScoreSendingListener;
@@ -73,5 +75,9 @@ public class FaultSeedingModule extends MilesModule {
         bindSingleton(MatchTimer.class, DefaultMatchTimerImpl.class);
 
         bindEagerSingleton(ClientNotificatorFinalScoreSendingListener.class);
+
+        bindEagerSingleton(MatchStatusCleanupListener.class);
+
+        bindEagerSingleton(ClientCloseListener.class);
     }
 }
