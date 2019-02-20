@@ -54,6 +54,17 @@ public class DefaultScoringServiceImpl implements ScoringService {
         }
     }
 
+    @Override
+    public FinalScore calculateFinalScore() {
+        final List<Position> ranking = this.getRanking();
+
+        final List<String> winners = ranking.get(0).getPlayers();
+
+        final FinalScore.Result result = winners.size() == 1 ? FinalScore.Result.WIN : FinalScore.Result.DRAW;
+
+        return new FinalScore(winners, ranking, result);
+    }
+
     void onMatchCommencing() {
         scoreMap.clear();
 

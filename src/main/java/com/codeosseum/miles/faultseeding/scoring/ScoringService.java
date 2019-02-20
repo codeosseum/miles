@@ -11,4 +11,6 @@ public interface ScoringService {
     List<Position> getRanking();
 
     void scoreSubmission(SubmissionResult submissionResult);
+
+    FinalScore calculateFinalScore();
 }

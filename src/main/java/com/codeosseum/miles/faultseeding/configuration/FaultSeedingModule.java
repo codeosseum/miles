@@ -5,10 +5,10 @@ import com.codeosseum.miles.faultseeding.challenge.configuation.ChallengeModule;
 import com.codeosseum.miles.faultseeding.match.configuration.DefaultMatchConfigurationHolderImpl;
 import com.codeosseum.miles.faultseeding.match.configuration.MatchConfigurationHolder;
 import com.codeosseum.miles.faultseeding.match.flow.ingame.MatchIngameOrchestratorListener;
-import com.codeosseum.miles.faultseeding.match.flow.cleanup.DefaultMatchTimerImpl;
-import com.codeosseum.miles.faultseeding.match.flow.cleanup.FinalScoreSendingListener;
-import com.codeosseum.miles.faultseeding.match.flow.cleanup.MatchTimer;
-import com.codeosseum.miles.faultseeding.match.flow.cleanup.MatchTimerListener;
+import com.codeosseum.miles.faultseeding.match.flow.ingame.timer.DefaultMatchTimerImpl;
+import com.codeosseum.miles.faultseeding.match.flow.cleanup.ClientNotificatorFinalScoreSendingListener;
+import com.codeosseum.miles.faultseeding.match.flow.ingame.timer.MatchTimer;
+import com.codeosseum.miles.faultseeding.match.flow.ingame.timer.MatchTimerListener;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
 import com.codeosseum.miles.faultseeding.match.registration.MatchRegistrationController;
 import com.codeosseum.miles.faultseeding.match.flow.setup.commencing.MatchCommencingSignalListener;
@@ -72,6 +72,6 @@ public class FaultSeedingModule extends MilesModule {
 
         bindSingleton(MatchTimer.class, DefaultMatchTimerImpl.class);
 
-        bindEagerSingleton(FinalScoreSendingListener.class);
+        bindEagerSingleton(ClientNotificatorFinalScoreSendingListener.class);
     }
 }

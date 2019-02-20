@@ -1,4 +1,4 @@
-package com.codeosseum.miles.faultseeding.match.flow.cleanup;
+package com.codeosseum.miles.faultseeding.match.flow.ingame.timer;
 
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
