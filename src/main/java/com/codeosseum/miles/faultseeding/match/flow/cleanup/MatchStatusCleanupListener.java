@@ -15,6 +15,9 @@ import static com.codeosseum.miles.match.MatchStatus.UNSET_MODE;
 import static com.codeosseum.miles.match.MatchStatus.UNSET_STAGE;
 
 public class MatchStatusCleanupListener implements SignalConsumer {
+    // TODO: read from configuration
+    private static final String SERVER_IDENTIFIER = "server-01";
+
     private final MatchStatus matchStatus;
 
     private final ScoringService scoringService;
@@ -53,14 +56,16 @@ public class MatchStatusCleanupListener implements SignalConsumer {
     private MatchOverPayload makeMatchOverPayload(final String matchId) {
         final FinalScore finalScore = scoringService.calculateFinalScore();
 
-        return new MatchOverPayload(matchId, finalScore);
+        return new MatchOverPayload(matchId, SERVER_IDENTIFIER, finalScore);
     }
 
     @Value
     private static final class MatchOverPayload {
         private static final String IDENTIFIER = "fault-seeding-match-over";
 
-        private final String id;
+        private final String matchId;
+
+        private final String serverId;
 
         private final FinalScore finalScore;
     }
