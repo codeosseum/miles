@@ -6,6 +6,7 @@ import com.codeosseum.miles.faultseeding.match.configuration.MatchConfiguration;
 import com.codeosseum.miles.match.MatchStatus;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -48,7 +49,7 @@ public class MatchRegistrationController extends JsonHttpController {
         if (matchStatus.getCurrentMode().equals(UNSET_MODE)) {
             response.status(CREATED.getCode());
 
-            dispatchMatch(gson.fromJson(request.body(), MatchConfiguration.class));
+            dispatchMatch(gson.fromJson(request.body(), RegisterMatchRequest.class));
 
             LOGGER.info("Registered new FAULT SEEDING match");
         } else {
@@ -60,7 +61,14 @@ public class MatchRegistrationController extends JsonHttpController {
         return EMPTY_RESPONSE;
     }
 
-    private void dispatchMatch(final MatchConfiguration matchConfiguration) {
-        eventDispatcher.dispatchEvent(new FaultSeedingMatchRegisteredEvent(matchConfiguration));
+    private void dispatchMatch(final RegisterMatchRequest request) {
+        eventDispatcher.dispatchEvent(new FaultSeedingMatchRegisteredEvent(request.getId(), request.getMatchConfiguration()));
+    }
+
+    @Value
+    private static final class RegisterMatchRequest {
+        private final String id;
+
+        private final MatchConfiguration matchConfiguration;
     }
 }

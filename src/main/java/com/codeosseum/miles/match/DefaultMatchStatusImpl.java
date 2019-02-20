@@ -7,9 +7,12 @@ public class DefaultMatchStatusImpl implements MatchStatus {
 
     private final AtomicReference<String> currentMode;
 
+    private String id;
+
     public DefaultMatchStatusImpl() {
         this.currentStage = new AtomicReference<>(UNSET_STAGE);
         this.currentMode = new AtomicReference<>(UNSET_MODE);
+        this.id = null;
     }
 
     @Override
@@ -30,5 +33,15 @@ public class DefaultMatchStatusImpl implements MatchStatus {
     @Override
     public void setCurrentMode(final String currentMode) {
         this.currentMode.set(currentMode);
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final String id) {
+        this.id = id;
     }
 }

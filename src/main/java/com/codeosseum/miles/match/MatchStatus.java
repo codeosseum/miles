@@ -12,4 +12,8 @@ public interface MatchStatus {
     String getCurrentMode();
 
     void setCurrentMode(String mode);
+
+    String getId();
+
+    void setId(String id);
 }

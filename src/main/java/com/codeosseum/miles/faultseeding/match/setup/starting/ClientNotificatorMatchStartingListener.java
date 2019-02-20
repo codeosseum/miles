@@ -7,7 +7,7 @@ import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
 import com.codeosseum.miles.player.PresentPlayerRegistry;
 import com.google.inject.Inject;
 
-public class MatchStartingPublisherListener implements SignalConsumer {
+public class ClientNotificatorMatchStartingListener implements SignalConsumer {
     private static final String FAULT_SEEDING_MATCH_STARTING = "fault-seeding-match-starting";
 
     private final PresentPlayerRegistry playerRegistry;
@@ -15,7 +15,7 @@ public class MatchStartingPublisherListener implements SignalConsumer {
     private final PushMessageToClientService messageService;
 
     @Inject
-    public MatchStartingPublisherListener(final PresentPlayerRegistry playerRegistry, final PushMessageToClientService messageService, final EventDispatcher eventDispatcher) {
+    public ClientNotificatorMatchStartingListener(final PresentPlayerRegistry playerRegistry, final PushMessageToClientService messageService, final EventDispatcher eventDispatcher) {
         this.playerRegistry = playerRegistry;
         this.messageService = messageService;
 

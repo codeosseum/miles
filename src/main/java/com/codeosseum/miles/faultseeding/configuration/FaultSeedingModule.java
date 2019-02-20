@@ -12,7 +12,7 @@ import com.codeosseum.miles.faultseeding.match.over.MatchTimerListener;
 import com.codeosseum.miles.faultseeding.match.registration.MatchIgniter;
 import com.codeosseum.miles.faultseeding.match.registration.MatchRegistrationController;
 import com.codeosseum.miles.faultseeding.match.setup.commencing.MatchCommencingSignalListener;
-import com.codeosseum.miles.faultseeding.match.setup.starting.MatchStartingPublisherListener;
+import com.codeosseum.miles.faultseeding.match.setup.starting.ClientNotificatorMatchStartingListener;
 import com.codeosseum.miles.faultseeding.match.setup.waiting.AllPlayersAvailableSignalListener;
 import com.codeosseum.miles.faultseeding.match.setup.waiting.PlayerJoinedListener;
 import com.codeosseum.miles.faultseeding.scoring.DefaultScoringServiceImpl;
@@ -54,7 +54,7 @@ public class FaultSeedingModule extends MilesModule {
 
         bindEagerSingleton(MatchCommencingSignalListener.class);
 
-        bindEagerSingleton(MatchStartingPublisherListener.class);
+        bindEagerSingleton(ClientNotificatorMatchStartingListener.class);
 
         bindEagerSingleton(AllPlayersAvailableSignalListener.class);
 

@@ -5,5 +5,7 @@ import lombok.Value;
 
 @Value
 public class FaultSeedingMatchRegisteredEvent {
+    private final String id;
+
     private final MatchConfiguration matchConfiguration;
 }

@@ -33,6 +33,7 @@ public class MatchIgniter implements EventConsumer<FaultSeedingMatchRegisteredEv
     public void accept(final FaultSeedingMatchRegisteredEvent event) {
         matchStatus.setCurrentMode(Constants.MODE);
         matchStatus.setCurrentStage(Constants.Stage.WAITING_FOR_PLAYERS);
+        matchStatus.setId(event.getId());
 
         matchConfigurationHolder.set(event.getMatchConfiguration());
 
