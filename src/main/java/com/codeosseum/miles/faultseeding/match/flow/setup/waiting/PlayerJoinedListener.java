@@ -37,10 +37,6 @@ public class PlayerJoinedListener implements EventConsumer<PlayerJoinedEvent> {
 
         final int missingPlayerCount = expectedPlayerCount - actualPlayerCount;
 
-        // missingPlayerCount == 1 is OK, because this listener might get called
-        // before the most recently joined player gets added to the registry.
-        return missingPlayerCount <= 1;
+        return missingPlayerCount == 0;
     }
-
-
 }

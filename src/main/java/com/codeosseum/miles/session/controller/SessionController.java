@@ -5,6 +5,7 @@ import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatch
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.player.PresentPlayerRegistry;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;
 import com.codeosseum.miles.player.event.PlayerJoinedEvent;
 import com.codeosseum.miles.player.event.PlayerLeftEvent;
@@ -21,15 +22,19 @@ public class SessionController extends JsonWebSocketController {
 
     private final RegisteredPlayerRegistry registeredPlayerRegistry;
 
+    private final PresentPlayerRegistry presentPlayerRegistry;
+
     private final EventDispatcher eventDispatcher;
 
     @Inject
     public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry,
-                             final RegisteredPlayerRegistry registeredPlayerRegistry, final EventDispatcher eventDispatcher) {
+                             final RegisteredPlayerRegistry registeredPlayerRegistry, final PresentPlayerRegistry presentPlayerRegistry,
+                             final EventDispatcher eventDispatcher) {
         super(gson, messageTransmitter);
 
         this.sessionRegistry = sessionRegistry;
         this.registeredPlayerRegistry = registeredPlayerRegistry;
+        this.presentPlayerRegistry = presentPlayerRegistry;
         this.eventDispatcher = eventDispatcher;
     }
 
@@ -62,6 +67,8 @@ public class SessionController extends JsonWebSocketController {
 
         if (canAuthenticate) {
             sessionRegistry.addAuthenticatedSession(session, username);
+
+            presentPlayerRegistry.addPlayer(username);
 
             eventDispatcher.dispatchEvent(new PlayerJoinedEvent(username));
         }

@@ -24,7 +24,7 @@ public class MatchRegistrationController extends JsonHttpController {
 
     private static final String APPLICATION_JSON = "application/json";
 
-    private static final String NEW_MATCH = "/match/faultseeding";
+    private static final String NEW_MATCH = "/match/fault-seeding";
 
     private final MatchStatus matchStatus;
 

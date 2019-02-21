@@ -7,11 +7,8 @@ import com.codeosseum.miles.player.DefaultPresentPlayerRegistryImpl;
 import com.codeosseum.miles.player.DefaultRegisteredPlayerRegistryImpl;
 import com.codeosseum.miles.player.PresentPlayerRegistry;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;
-import com.codeosseum.miles.player.event.PlayerJoinedListener;
-import com.codeosseum.miles.player.event.PlayerLeftEvent;
 import com.codeosseum.miles.player.event.PlayerLeftListener;
 import com.codeosseum.miles.util.inject.MilesModule;
-import com.google.inject.Singleton;
 
 import static java.util.Arrays.asList;
 
@@ -26,8 +23,6 @@ public class PlayerModule extends MilesModule {
         bindSingleton(RegisteredPlayerRegistry.class, DefaultRegisteredPlayerRegistryImpl.class);
 
         bindSingleton(PresentPlayerRegistry.class, DefaultPresentPlayerRegistryImpl.class);
-
-        bindEagerSingleton(PlayerJoinedListener.class);
 
         bindEagerSingleton(PlayerLeftListener.class);
     }

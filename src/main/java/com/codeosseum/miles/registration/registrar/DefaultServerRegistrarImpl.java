@@ -14,7 +14,7 @@ public class DefaultServerRegistrarImpl implements ServerRegistrar {
     private static final String SERVER_IDENTIFIER = "server-01";
 
     // TODO: read from configuration
-    private static final String SERVER_URI = "127.0.0.1:3000";
+    private static final String SERVER_URI = "http://127.0.0.1:3000";
 
     private final PushMessageToAresService pushMessageService;
 
