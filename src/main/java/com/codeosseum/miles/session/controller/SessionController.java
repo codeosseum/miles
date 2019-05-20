@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 public class SessionController extends JsonWebSocketController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class);
 
+    private static final long SESSION_TIMEOUT = 1000 * 60 * 3;
+
     private final SessionRegistry sessionRegistry;
 
     private final RegisteredPlayerRegistry registeredPlayerRegistry;
@@ -55,6 +57,8 @@ public class SessionController extends JsonWebSocketController {
 
     private void onConnectionOpen(final Session session) {
         LOGGER.info("Received new WS connection from {}", session.getRemoteAddress());
+
+        session.setIdleTimeout(SESSION_TIMEOUT);
 
         sessionRegistry.addActiveSession(session);
     }
