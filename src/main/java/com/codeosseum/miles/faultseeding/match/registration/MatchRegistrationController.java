@@ -62,7 +62,13 @@ public class MatchRegistrationController extends JsonHttpController {
     }
 
     private void dispatchMatch(final RegisterMatchRequest request) {
-        eventDispatcher.dispatchEvent(new FaultSeedingMatchRegisteredEvent(request.getId(), request.getMatchConfiguration()));
+        final FaultSeedingMatchRegisteredEvent event = FaultSeedingMatchRegisteredEvent.builder()
+                .id(request.id)
+                .matchConfiguration(request.matchConfiguration)
+                .joinPassword(request.joinPassword)
+                .build();
+
+        eventDispatcher.dispatchEvent(event);
     }
 
     @Value
@@ -70,5 +76,7 @@ public class MatchRegistrationController extends JsonHttpController {
         private final String id;
 
         private final MatchConfiguration matchConfiguration;
+
+        private final String joinPassword;
     }
 }

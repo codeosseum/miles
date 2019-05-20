@@ -5,6 +5,7 @@ import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatch
 import com.codeosseum.miles.communication.websocket.session.SessionRegistry;
 import com.codeosseum.miles.communication.websocket.transmission.MessageTransmitter;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
+import com.codeosseum.miles.match.MatchStatus;
 import com.codeosseum.miles.player.PresentPlayerRegistry;
 import com.codeosseum.miles.player.RegisteredPlayerRegistry;
 import com.codeosseum.miles.player.event.PlayerJoinedEvent;
@@ -24,17 +25,20 @@ public class SessionController extends JsonWebSocketController {
 
     private final PresentPlayerRegistry presentPlayerRegistry;
 
+    private final MatchStatus matchStatus;
+
     private final EventDispatcher eventDispatcher;
 
     @Inject
     public SessionController(final Gson gson, final MessageTransmitter messageTransmitter, final SessionRegistry sessionRegistry,
                              final RegisteredPlayerRegistry registeredPlayerRegistry, final PresentPlayerRegistry presentPlayerRegistry,
-                             final EventDispatcher eventDispatcher) {
+                             final MatchStatus matchStatus, final EventDispatcher eventDispatcher) {
         super(gson, messageTransmitter);
 
         this.sessionRegistry = sessionRegistry;
         this.registeredPlayerRegistry = registeredPlayerRegistry;
         this.presentPlayerRegistry = presentPlayerRegistry;
+        this.matchStatus = matchStatus;
         this.eventDispatcher = eventDispatcher;
     }
 
@@ -57,13 +61,15 @@ public class SessionController extends JsonWebSocketController {
 
     private void onHello(final Session session, final HelloMessage payload) {
         final String username = payload.getUsername();
+        final String suppliedPassword = payload.getJoinPassword();
 
         LOGGER.info("User {} trying to authenticate", username);
 
         final boolean canAuthenticate =
                 sessionNotAuthenticated(session)
                 && userNotAuthenticated(username)
-                && userIsParticipantOfTheMatch(username);
+                && userIsParticipantOfTheMatch(username)
+                && passwordsMatch(suppliedPassword);
 
         if (canAuthenticate) {
             sessionRegistry.addAuthenticatedSession(session, username);
@@ -72,6 +78,10 @@ public class SessionController extends JsonWebSocketController {
 
             eventDispatcher.dispatchEvent(new PlayerJoinedEvent(username));
         }
+    }
+
+    private boolean passwordsMatch(final String suppliedPassword) {
+        return matchStatus.getJoinPassword().equals(suppliedPassword);
     }
 
     private void onConnectionClose(final Session session, final int statusCode, final String reason) {

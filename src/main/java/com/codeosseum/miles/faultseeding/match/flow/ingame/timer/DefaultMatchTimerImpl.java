@@ -13,7 +13,7 @@ import com.google.inject.name.Named;
 
 public class DefaultMatchTimerImpl implements MatchTimer {
     // TODO: Read from configuration.
-    private static final long COUNTDOWN_MILLISECONDS = 30000;
+    private static final long COUNTDOWN_MILLISECONDS = 1000 * 60 * 15;
 
     private final MatchStatus matchStatus;
 

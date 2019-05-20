@@ -7,4 +7,6 @@ public class HelloMessage {
     public static final String ACTION = "hello";
 
     private final String username;
+
+    private final String joinPassword;
 }

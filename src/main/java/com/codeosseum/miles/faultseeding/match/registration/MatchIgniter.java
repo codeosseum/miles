@@ -33,6 +33,7 @@ public class MatchIgniter implements EventConsumer<FaultSeedingMatchRegisteredEv
         matchStatus.setCurrentMode(Constants.MODE);
         matchStatus.setCurrentStage(Constants.Stage.WAITING_FOR_PLAYERS);
         matchStatus.setId(event.getId());
+        matchStatus.setJoinPassword(event.getJoinPassword());
 
         matchConfigurationHolder.set(event.getMatchConfiguration());
 

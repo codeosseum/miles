@@ -7,11 +7,14 @@ public class DefaultMatchStatusImpl implements MatchStatus {
 
     private final AtomicReference<String> currentMode;
 
+    private final AtomicReference<String> joinPassword;
+
     private String id;
 
     public DefaultMatchStatusImpl() {
         this.currentStage = new AtomicReference<>(UNSET_STAGE);
         this.currentMode = new AtomicReference<>(UNSET_MODE);
+        this.joinPassword = new AtomicReference<>(UNSET_JOIN_PASSOWRD);
         this.id = null;
     }
 
@@ -43,5 +46,15 @@ public class DefaultMatchStatusImpl implements MatchStatus {
     @Override
     public void setId(final String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getJoinPassword() {
+        return joinPassword.get();
+    }
+
+    @Override
+    public void setJoinPassword(final String joinPassword) {
+        this.joinPassword.set(joinPassword);
     }
 }

@@ -11,6 +11,7 @@ import lombok.Value;
 
 import static com.codeosseum.miles.communication.Message.message;
 import static com.codeosseum.miles.match.MatchStatus.UNSET_ID;
+import static com.codeosseum.miles.match.MatchStatus.UNSET_JOIN_PASSOWRD;
 import static com.codeosseum.miles.match.MatchStatus.UNSET_MODE;
 import static com.codeosseum.miles.match.MatchStatus.UNSET_STAGE;
 
@@ -47,6 +48,7 @@ public class MatchStatusCleanupListener implements SignalConsumer {
         matchStatus.setCurrentStage(UNSET_STAGE);
         matchStatus.setCurrentMode(UNSET_MODE);
         matchStatus.setId(UNSET_ID);
+        matchStatus.setJoinPassword(UNSET_JOIN_PASSOWRD);
     }
 
     private void sendFinalScoreToAres(final String matchId) {

@@ -7,6 +7,8 @@ public interface MatchStatus {
 
     String UNSET_ID = "";
 
+    String UNSET_JOIN_PASSOWRD = "";
+
     String getCurrentStage();
 
     void setCurrentStage(String stage);
@@ -18,4 +20,8 @@ public interface MatchStatus {
     String getId();
 
     void setId(String id);
+
+    String getJoinPassword();
+
+    void setJoinPassword(String joinPassword);
 }
