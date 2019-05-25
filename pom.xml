@@ -46,7 +46,9 @@
         <httpasyncclient.version>4.0.2</httpasyncclient.version>
         <httpmime.version>4.3.6</httpmime.version>
         <jgit.version>5.2.1.201812262042-r</jgit.version>
-        <constretto.version>2.2.3</constretto.version>
+        <constretto.version>3.0.0-BETA1</constretto.version>
+        <snakeyaml.version>1.24</snakeyaml.version>
+        <config.version>1.3.4</config.version>
 
         <!-- PLUGIN VERSIONS -->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
@@ -131,9 +133,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.constretto</groupId>
-            <artifactId>constretto-core</artifactId>
-            <version>${constretto.version}</version>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${config.version}</version>
         </dependency>
     </dependencies>
 
