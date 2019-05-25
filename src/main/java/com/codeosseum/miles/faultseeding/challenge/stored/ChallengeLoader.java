@@ -19,7 +19,7 @@ class ChallengeLoader {
     private static final String ID_SEPARATOR = ":";
     private static final String SOLUTION_PATH_PREFIX = "solutions";
     private static final String MANIFEST_FILENAME = "manifest.json";
-    private static final Path DESCRIPTION_PATH = Paths.get("description.md");
+    private static final Path DESCRIPTION_PATH = Paths.get("README.md");
     private static final Path EVALUATOR_ENTRYPOINT_PATH = Paths.get("evaluator", "index.js");
 
     private final Path baseDirectory;
