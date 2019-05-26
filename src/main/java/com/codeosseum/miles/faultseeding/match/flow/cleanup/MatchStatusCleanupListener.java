@@ -1,6 +1,7 @@
 package com.codeosseum.miles.faultseeding.match.flow.cleanup;
 
 import com.codeosseum.miles.communication.push.PushMessageToAresService;
+import com.codeosseum.miles.configuration.SelfConfig;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.eventbus.dispatch.SignalConsumer;
 import com.codeosseum.miles.faultseeding.scoring.FinalScore;
@@ -16,21 +17,22 @@ import static com.codeosseum.miles.match.MatchStatus.UNSET_MODE;
 import static com.codeosseum.miles.match.MatchStatus.UNSET_STAGE;
 
 public class MatchStatusCleanupListener implements SignalConsumer {
-    // TODO: read from configuration
-    private static final String SERVER_IDENTIFIER = "server-01";
-
     private final MatchStatus matchStatus;
 
     private final ScoringService scoringService;
 
     private final PushMessageToAresService messagingService;
 
+    private final SelfConfig configuration;
+
     @Inject
     public MatchStatusCleanupListener(final MatchStatus matchStatus, final EventDispatcher eventDispatcher,
-                                      final ScoringService scoringService, final PushMessageToAresService messagingService) {
+                                      final ScoringService scoringService, final PushMessageToAresService messagingService,
+                                      final SelfConfig configuration) {
         this.matchStatus = matchStatus;
         this.scoringService = scoringService;
         this.messagingService = messagingService;
+        this.configuration = configuration;
 
         eventDispatcher.registerConsumer(ScoreSentToClientsSignal.class, this);
     }
@@ -58,7 +60,7 @@ public class MatchStatusCleanupListener implements SignalConsumer {
     private MatchOverPayload makeMatchOverPayload(final String matchId) {
         final FinalScore finalScore = scoringService.calculateFinalScore();
 
-        return new MatchOverPayload(matchId, SERVER_IDENTIFIER, finalScore);
+        return new MatchOverPayload(matchId, configuration.getIdentifier(), finalScore);
     }
 
     @Value

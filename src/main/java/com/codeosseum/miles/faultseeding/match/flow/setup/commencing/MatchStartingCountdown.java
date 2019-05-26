@@ -9,8 +9,7 @@ import com.codeosseum.miles.faultseeding.match.flow.setup.starting.MatchStarting
 import com.codeosseum.miles.match.MatchStatus;
 
 public class MatchStartingCountdown {
-    // TODO: Read from configuration.
-    private static final long COUNTDOWN_MILLISECONDS = 5000;
+    private static final int MILLISECONDS_IN_A_SECOND = 1000;
 
     private final EventDispatcher eventDispatcher;
 
@@ -18,10 +17,14 @@ public class MatchStartingCountdown {
 
     private final Timer timer;
 
-    public MatchStartingCountdown(final EventDispatcher eventDispatcher, final MatchStatus matchStatus, final Timer timer) {
+    private final int countdownSeconds;
+
+    public MatchStartingCountdown(final EventDispatcher eventDispatcher, final MatchStatus matchStatus,
+                                  final Timer timer, final int countdownSeconds) {
         this.eventDispatcher = eventDispatcher;
         this.matchStatus = matchStatus;
         this.timer = timer;
+        this.countdownSeconds = countdownSeconds;
     }
 
     public void start() {
@@ -32,6 +35,6 @@ public class MatchStartingCountdown {
 
                 eventDispatcher.dispatchEvent(new MatchStartingSignal());
             }
-        }, COUNTDOWN_MILLISECONDS);
+        }, countdownSeconds * MILLISECONDS_IN_A_SECOND);
     }
 }

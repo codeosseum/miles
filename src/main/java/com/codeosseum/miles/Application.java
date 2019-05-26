@@ -3,6 +3,8 @@ package com.codeosseum.miles;
 import com.codeosseum.miles.challenge.configuration.ChallengeModule;
 import com.codeosseum.miles.chat.configuration.ChatModule;
 import com.codeosseum.miles.communication.websocket.dispatcher.WebSocketDispatcher;
+import com.codeosseum.miles.configuration.ConfigurationModule;
+import com.codeosseum.miles.configuration.SelfConfig;
 import com.codeosseum.miles.eventbus.configuration.EventBusModule;
 import com.codeosseum.miles.eventbus.dispatch.EventDispatcher;
 import com.codeosseum.miles.faultseeding.configuration.FaultSeedingModule;
@@ -34,9 +36,6 @@ import static spark.Spark.awaitInitialization;
 import static spark.Spark.port;
 
 public final class Application {
-    // TODO: read from configuration
-    private static final int PORT = 3000;
-
     public static void main(String[] args) {
         final Injector injector = createInjector(modules());
 
@@ -45,6 +44,7 @@ public final class Application {
 
     private static List<Module> modules() {
         return asList(
+                new ConfigurationModule(),
                 new MappingModule(),
                 new WebSocketModule(),
                 new EventBusModule(),
@@ -72,16 +72,20 @@ public final class Application {
 
         private final WebSocketDispatcher webSocketDispatcher;
 
+        private final SelfConfig configuration;
+
         @Inject
-        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final EventDispatcher eventDispatcher, final WebSocketDispatcher webSocketDispatcher) {
+        public Bootstrapper(final WebSocketBootstrapper webSocketBootstrapper, final HttpBootstrapper httpBootstrapper, final EventDispatcher eventDispatcher,
+                            final WebSocketDispatcher webSocketDispatcher, final SelfConfig configuration) {
             this.webSocketBootstrapper = webSocketBootstrapper;
             this.httpBootstrapper = httpBootstrapper;
             this.eventDispatcher = eventDispatcher;
             this.webSocketDispatcher = webSocketDispatcher;
+            this.configuration = configuration;
         }
 
         private void bootstrap() {
-            port(PORT);
+            port(configuration.getPort());
 
             webSocketBootstrapper.bootstrap();
 

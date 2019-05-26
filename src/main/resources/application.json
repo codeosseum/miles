@@ -1,0 +1,19 @@
+{
+  "self": {
+    "port": 3001,
+    "uri": "http://127.0.0.1",
+    "identifier": "server-01"
+  },
+  "ares": {
+    "eventUri": "http://127.0.0.1:8000/api/event"
+  },
+  "quaestiones": {
+    "remoteRepositoryUri": "https://github.com/codeosseum/quaestiones.git",
+    "localRepositoryPath": "challenges",
+    "treelike": "master"
+  },
+  "faultSeeding": {
+    "runtimeSeconds": 60,
+    "startingCountdownSeconds": 5
+  }
+}

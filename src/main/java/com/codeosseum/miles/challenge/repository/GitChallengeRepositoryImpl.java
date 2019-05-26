@@ -1,5 +1,6 @@
 package com.codeosseum.miles.challenge.repository;
 
+import com.codeosseum.miles.configuration.QuaestionesConfig;
 import com.codeosseum.miles.mapping.Json;
 import com.google.common.io.MoreFiles;
 import com.google.inject.Inject;
@@ -24,23 +25,18 @@ import java.util.stream.Collectors;
 public class GitChallengeRepositoryImpl implements ChallengeRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(GitChallengeRepositoryImpl.class);
 
-    // TODO: Read from configuration.
-    private static final String REPOSITORY_REMOTE_URL = "https://github.com/codeosseum/quaestiones.git";
-
-    // TODO: Read from configuration.
-    private static final String REPOSITORY_LOCAL_PATH = "challenges";
-
-    private static final Path TRANSLATION_FILE_PATH = Paths.get(REPOSITORY_LOCAL_PATH, "src", "challenges", "modes.json");
-
     private Map<String, String> translationMap;
 
     private final Object mapLock = new Object();
 
     private final Json json;
 
+    private final QuaestionesConfig configuration;
+
     @Inject
-    public GitChallengeRepositoryImpl(final Json json) {
+    public GitChallengeRepositoryImpl(final Json json, final QuaestionesConfig configuration) {
         this.json = json;
+        this.configuration = configuration;
     }
 
     @Override
@@ -72,7 +68,7 @@ public class GitChallengeRepositoryImpl implements ChallengeRepository {
     private List<String> loadChallengesForMode(final String mode) {
         // TODO: Throw exception
         try {
-            return MoreFiles.listFiles(Paths.get(REPOSITORY_LOCAL_PATH, "src", "challenges", mode))
+            return MoreFiles.listFiles(Paths.get(configuration.getLocalRepositoryPath(), "src", "challenges", mode))
                     .stream()
                     .map(Path::toString)
                     .collect(Collectors.toList());
@@ -83,24 +79,26 @@ public class GitChallengeRepositoryImpl implements ChallengeRepository {
 
     private void cloneRepository() throws IOException, GitAPIException {
         // TODO: Make easier to test.
-        final Path localPath = Paths.get(REPOSITORY_LOCAL_PATH);
+        final Path localPath = Paths.get(configuration.getLocalRepositoryPath());
 
         if (Files.exists(localPath)) {
             FileUtils.delete(localPath.toFile(), FileUtils.RECURSIVE);
         }
 
-        LOGGER.info("Loading challenge git repository from remote: {}", REPOSITORY_REMOTE_URL);
+        LOGGER.info("Loading challenge git repository from remote: {}", configuration.getRemoteRepositoryUri());
 
         try (Git result = Git.cloneRepository()
-                .setURI(REPOSITORY_REMOTE_URL)
-                .setDirectory(new File(REPOSITORY_LOCAL_PATH))
+                .setURI(configuration.getRemoteRepositoryUri())
+                .setDirectory(new File(configuration.getLocalRepositoryPath()))
                 .call()) {
             LOGGER.info("Done cloning challenge repository.");
         }
     }
 
-    private Map<String, String> loadTranslations() throws IOException{
-        return json.fromJson(TRANSLATION_FILE_PATH, Modes.class).getModes();
+    private Map<String, String> loadTranslations() throws IOException {
+        final Path translationFilePath = Paths.get(configuration.getLocalRepositoryPath(), "src", "challenges", "modes.json");
+
+        return json.fromJson(translationFilePath, Modes.class).getModes();
     }
 
     @Value
