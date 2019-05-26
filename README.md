@@ -39,32 +39,32 @@ You can run it using `java -jar` in the `target` directory.
 
 Miles can be configured through the following properties:
 
-~~~~JSON
+~~~~JSON5
 {
   "self": {
-    # The port Miles will listen to.
+    // The port Miles will listen to.
     "port": 3001,
-    # URI on which Miles can be reached by the players.
+    // URI on which Miles can be reached by the players.
     "uri": "http://127.0.0.1",
-    # Unique identifier of the Miles instance.
+    // Unique identifier of the Miles instance.
     "identifier": "server-01"
   },
   "ares": {
-    # The URI on which Miles can report events to Ares.
+    // The URI on which Miles can report events to Ares.
     "eventUri": "http://127.0.0.1:8000/api/event"
   },
   "quaestiones": {
-    # The Quaestiones git repository URI.
+    // The Quaestiones git repository URI.
     "remoteRepositoryUri": "https://github.com/codeosseum/quaestiones.git",
-    # Path into which the repository will be cloned.
+    // Path into which the repository will be cloned.
     "localRepositoryPath": "challenges",
-    # The treelike to check out.
+    // The treelike to check out.
     "treelike": "master"
   },
   "faultSeeding": {
-    # Runtime of a Fault Seeding match.
+    // Runtime of a Fault Seeding match.
     "runtimeSeconds": 60,
-    # Time to wait after all players have joined.
+    // Time to wait after all players have joined.
     "startingCountdownSeconds": 5
   }
 }
