@@ -42,7 +42,7 @@
         <logback.version>1.2.3</logback.version>
         <guava.version>27.0.1-jre</guava.version>
         <unirest.version>1.4.9</unirest.version>
-        <httpclient.version>4.3.6</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <httpasyncclient.version>4.0.2</httpasyncclient.version>
         <httpmime.version>4.3.6</httpmime.version>
         <jgit.version>5.2.1.201812262042-r</jgit.version>
