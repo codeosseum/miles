@@ -38,7 +38,7 @@
         <lombok.version>1.18.4</lombok.version>
         <spark-core.version>2.8.0</spark-core.version>
         <guice.version>4.2.2</guice.version>
-        <gson.version>2.8.5</gson.version>
+        <gson.version>2.8.9</gson.version>
         <logback.version>1.2.3</logback.version>
         <guava.version>27.0.1-jre</guava.version>
         <unirest.version>1.4.9</unirest.version>
